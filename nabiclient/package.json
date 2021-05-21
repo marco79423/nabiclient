@@ -1,0 +1,25 @@
+{
+  "private": true,
+  "name": "nabiclient",
+  "description": "NATS Client",
+  "version": "1.0.0",
+  "author": "兩大類 <marco79423@gmail.com>",
+  "main": "app/background.js",
+  "scripts": {
+    "dev": "nextron",
+    "build": "nextron build",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "dependencies": {
+    "electron-serve": "^1.1.0",
+    "electron-store": "^7.0.2"
+  },
+  "devDependencies": {
+    "electron": "^12.0.2",
+    "electron-builder": "^22.10.5",
+    "next": "^10.1.3",
+    "nextron": "^6.0.6",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  }
+}

@@ -1,0 +1,12 @@
+appId: net.marco79423.nabiclient
+productName: Nabiclient
+copyright: Copyright © 2021 兩大類
+directories:
+  output: dist
+  buildResources: resources
+files:
+  - from: .
+    filter:
+      - package.json
+      - app
+publish: null
