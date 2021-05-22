@@ -61,7 +61,6 @@ export default function SubscribePanel({
   return (
     <Paper className={classes.root}>
       <div className={classes.controlBar}>
-        <Button onClick={onShowFavoriteRequestsClick}>{t('展開常用列表')}</Button>
       </div>
       <div className={classes.requestBody}>
         <TextArea
@@ -72,9 +71,7 @@ export default function SubscribePanel({
       </div>
       <Grid className={classes.bottomActions} container alignItems="center" justify="space-between">
         <Grid item>
-          <Button disabled={scheduleEnabled} onClick={onSetFavoriteRequestButtonClick}>
-            {favoriteRequestID ? t('取消常用') : t('設為常用')}
-          </Button>
+
         </Grid>
         <Grid item>
           <Grid container alignItems="center" spacing={3}>

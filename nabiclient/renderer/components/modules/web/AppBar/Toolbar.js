@@ -48,15 +48,6 @@ export default function Toolbar({onShareButtonClick, onExportButtonClick, onImpo
     <Grid container justify="space-between" alignItems="center">
       <Grid item>
         <MuiToolbar>
-
-          <IconButton description={t('分享專案')} icon={ShareIcon} onClick={onShareButtonClick}/>
-          {!mobileMode ? (
-            <>
-              <IconButton description={t('匯出專案')} icon={ArchiveIcon} onClick={onExportButtonClick}/>
-              <IconButton description={t('匯入專案')} icon={UnarchiveIcon} onClick={onImportButtonClick}/>
-            </>
-          ) : null}
-
           <Select
             className={classes.select}
             currentValue={i18n.language}

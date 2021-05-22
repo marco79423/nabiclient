@@ -25,12 +25,11 @@ export default function Logo() {
 
   return (
     <Grid className={classes.root} container item alignItems="center" spacing={2}>
-      <Grid xs={4} item>
+      <Grid xs item>
         <Avatar className={classes.logo} alt="logo" src={'/logo.png'}/>
       </Grid>
-      <Grid xs={8} item container>
+      <Grid xs item>
         <Typography className={classes.title} component="h1" variant="h5">Nabiclient</Typography>
-        <Typography className={classes.subtitle} component="h2" variant="subtitle2">Online NATS Client</Typography>
       </Grid>
     </Grid>
   )

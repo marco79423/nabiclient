@@ -18,7 +18,6 @@ import {
   updateFavoriteRequest
 } from '../../../../slices/project'
 import {ConnectionState} from '../../../../constants'
-import FavoriteRequestDialog from '../../../modules/common/FavoriteRequestDialog'
 import RequestPanel from '../../../modules/web/ControlPanel/RequestPanel'
 
 export default function RequestPanelContainer({appController}) {
@@ -28,9 +27,7 @@ export default function RequestPanelContainer({appController}) {
   const requestBody = useSelector(getRequestBody)
   const scheduleEnabled = useSelector(getScheduleEnabledStatus)
   const timeInterval = useSelector(getScheduleTimeInterval)
-  const favoriteRequests = useSelector(getFavoriteRequests)
   const [favoriteRequestID, setFavoriteRequestID] = useState(null)
-  const [favoriteRequestDialogOpen, setFavoriteRequestDialog] = useState(false)
   const [localRequestBody, setLocalRequestBody] = useState(requestBody)
   const [localScheduleTimeInterval, setLocalTimeInterval] = useState(timeInterval)
 
@@ -84,27 +81,6 @@ export default function RequestPanelContainer({appController}) {
     appController.track('show_favorite_requests_panel')
   }
 
-  const hideFavoriteRequestDialog = () => {
-    setFavoriteRequestDialog(false)
-  }
-
-  const onRemoveFavoriteRequest = (id) => {
-    if (id === favoriteRequestID) {
-      setFavoriteRequestID(null)
-    }
-    dispatch(removeFavoriteRequest(id))
-  }
-
-  const onApplyFavoriteRequest = (favoriteRequest) => {
-    setFavoriteRequestID(favoriteRequest.id)
-    dispatch(changeRequestBody(favoriteRequest.body))
-    setLocalRequestBody(favoriteRequest.body)
-  }
-
-  const onUpdateFavoriteRequest = async ({id, changes}) => {
-    dispatch(updateFavoriteRequest({id, changes}))
-  }
-
   const isConnected = connectionState === ConnectionState.Connected
 
   return (
@@ -127,20 +103,6 @@ export default function RequestPanelContainer({appController}) {
 
         scheduleEnabled={scheduleEnabled}
         onEnableButtonClick={onEnableButtonClick}
-      />
-
-      <FavoriteRequestDialog
-        isConnected={isConnected}
-
-        open={favoriteRequestDialogOpen}
-        onClose={hideFavoriteRequestDialog}
-
-        favoriteRequests={favoriteRequests}
-
-        onRemove={onRemoveFavoriteRequest}
-        onApply={onApplyFavoriteRequest}
-        onSend={onSendMessage}
-        onUpdate={onUpdateFavoriteRequest}
       />
     </>
   )
