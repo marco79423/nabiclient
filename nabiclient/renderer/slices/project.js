@@ -8,17 +8,11 @@ export const changeSettingMaxMessageCount = createAction('project/setting/change
 
 export const changeConnectionUrl = createAction('project/connection/changeConnectionUrl')
 
-export const changeRequestBody = createAction('project/request/changeRequestBody')
+export const changeSubscribeChannel = createAction('project/subscribe/changeSubscribeChannel')
 
-export const changeScheduleTimeInterval = createAction('project/schedule/changeScheduleTimeInterval')
+export const changePublishChannel = createAction('project/publish/changePublishChannel')
 
-export const addFavoriteRequest = createAction('project/request/addFavoriteRequest')
-
-export const removeFavoriteRequest = createAction('project/request/removeFavoriteRequest')
-
-export const clearFavoriteRequests = createAction('project/request/clearFavoriteRequests')
-
-export const updateFavoriteRequest = createAction('project/request/updateFavoriteRequest')
+export const changePublishMessageBody = createAction('project/publish/changePublishMessageBody')
 
 export const appendMessage = createAction('project/message/appendMessage')
 
@@ -28,7 +22,6 @@ export const clearMessages = createAction(  'project/message/clearMessages')
 
 // Slice
 export const messageAdapter = createEntityAdapter()
-export const favoriteRequestAdapter = createEntityAdapter()
 const projectSlice = createSlice({
   name: 'project',
   initialState: {
@@ -42,18 +35,14 @@ const projectSlice = createSlice({
       url: 'localhost:4222',
     },
 
-    // 請求
-    request: {
-      body: '',
+    subscribe: {
+      channel: '',
     },
 
-    // 排程
-    schedule: {
-      timeInterval: 3,
+    publish: {
+      channel: '',
+      messageBody: '',
     },
-
-    // 常用訊息
-    favoriteRequest: favoriteRequestAdapter.getInitialState(),
 
     // 訊息
     message: messageAdapter.getInitialState(),
@@ -68,23 +57,14 @@ const projectSlice = createSlice({
     [changeConnectionUrl]: (state, action) => {
       state.connection.url = action.payload
     },
-    [changeRequestBody]: (state, action) => {
-      state.request.body = action.payload
+    [changeSubscribeChannel]: (state, action) => {
+      state.subscribe.channel = action.payload
     },
-    [changeScheduleTimeInterval]: (state, action) => {
-      state.schedule.timeInterval = action.payload
+    [changePublishChannel]: (state, action) => {
+      state.publish.channel = action.payload
     },
-    [addFavoriteRequest]: (state, action) => {
-      favoriteRequestAdapter.addOne(state.favoriteRequest, action.payload)
-    },
-    [removeFavoriteRequest]: (state, action) => {
-      favoriteRequestAdapter.removeOne(state.favoriteRequest, action.payload)
-    },
-    [clearFavoriteRequests]: (state) => {
-      favoriteRequestAdapter.removeAll(state.favoriteRequest)
-    },
-    [updateFavoriteRequest]: (state, action) => {
-      favoriteRequestAdapter.updateOne(state.favoriteRequest, action.payload)
+    [changePublishMessageBody]: (state, action) => {
+      state.publish.messageBody = action.payload
     },
     [removeFirstMessage]: (state) => {
       messageAdapter.removeOne(state.message, state.message.ids[0])

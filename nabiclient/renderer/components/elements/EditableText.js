@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react'
 import PropTypes from 'prop-types'
 import {Typography} from '@material-ui/core'
 
-import TextField from './TextField'
+import TextFieldWithAction from './TextFieldWithAction'
 import LinkButton from './LinkButton'
 
 
@@ -33,7 +33,7 @@ export default function EditableText({className, value, setValue, allowEmpty, bu
 
   if (editMode) {
     return (
-      <TextField
+      <TextFieldWithAction
         className={className}
         multiline
         value={localValue}

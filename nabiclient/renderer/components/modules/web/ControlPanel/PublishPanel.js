@@ -11,15 +11,15 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
-    
+
     height: '100%',
     maxHeight: 500,
     padding: theme.spacing(3),
-    
+
     borderTopLeftRadius: 0,
   },
   controlBar: {
-    textAlign: 'right',
+    height: 60,
   },
   requestBody: {
     flex: 1,
@@ -32,11 +32,13 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function PublishPanel({
-                                            isConnected,
-                                            requestBody,
-                                            onRequestBodyChange,
-                                            onSendButtonClick
-                                          }) {
+                                       isConnected,
+                                       channel,
+                                       onChannelChange,
+                                       messageBody,
+                                       onMessageBodyChange,
+                                       onPublishMessage
+                                     }) {
   const classes = useStyles()
   const {t} = useTranslation('ControlPanel')
 
@@ -44,22 +46,23 @@ export default function PublishPanel({
     <Paper className={classes.root}>
       <div className={classes.controlBar}>
         <TextField
-          value={requestBody}
-          onChange={onRequestBodyChange}
+          label={t('頻道')}
+          value={channel}
+          onChange={onChannelChange}
         />
       </div>
       <div className={classes.requestBody}>
         <TextArea
           label={t('請求內容')}
-          value={requestBody}
-          onChange={onRequestBodyChange}
+          value={messageBody}
+          onChange={onMessageBodyChange}
         />
       </div>
       <Grid className={classes.bottomActions} container justify="space-between">
         <Grid item>
         </Grid>
         <Grid item>
-          <Button primary disabled={!isConnected} onClick={onSendButtonClick}>{t('送出')}</Button>
+          <Button primary disabled={!isConnected} onClick={onPublishMessage}>{t('送出')}</Button>
         </Grid>
       </Grid>
     </Paper>
@@ -68,7 +71,9 @@ export default function PublishPanel({
 
 PublishPanel.propTypes = {
   isConnected: PropTypes.bool.isRequired,
-  requestBody: PropTypes.string.isRequired,
-  onRequestBodyChange: PropTypes.func.isRequired,
-  onSendButtonClick: PropTypes.func.isRequired,
+  channel: PropTypes.string.isRequired,
+  onChannelChange: PropTypes.func.isRequired,
+  messageBody: PropTypes.string.isRequired,
+  onMessageBodyChange: PropTypes.func.isRequired,
+  onPublishMessage: PropTypes.func.isRequired,
 }

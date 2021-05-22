@@ -3,6 +3,7 @@ import {useDispatch, useSelector} from 'react-redux'
 import {GA4React} from 'ga-4-react'
 import useAsyncEffect from 'use-async-effect'
 import {useTranslation} from 'next-i18next'
+import {ipcRenderer} from 'electron'
 
 import {
   getMessageCount,
@@ -11,7 +12,7 @@ import {
   getSettingMaxMessageCount
 } from '../../selectors'
 import {changeConnectionState, changeProjectState, changeScheduleEnabledStatus} from '../../slices/current'
-import {LoadingState, MessageSource} from '../../constants'
+import {ConnectionState, LoadingState, MessageSource} from '../../constants'
 import {appendMessage, removeFirstMessage, setProjectData} from '../../slices/project'
 import generateRandomString from '../../utils/generateRandomString'
 import {loadProjectDataFromLocalStorage,} from '../../features/project'
@@ -57,42 +58,29 @@ export default function AppController({children}) {
   }
 
   const connect = (url) => {
-    wsClient.connect(url)
-    track('connect', {url})
+    ipcRenderer.send('connect', {url})
+    console.log('renderer connect', url)
+    dispatch(changeConnectionState(ConnectionState.Connected))
   }
 
   const disconnect = () => {
-    wsClient.close()
+    ipcRenderer.send('disconnect')
+    dispatch(changeConnectionState(ConnectionState.Idle))
   }
 
-  const sendMessage = async (message) => {
-    wsClient.send(message)
+  const publishMessage = async (channel, message) => {
+    ipcRenderer.send('publish', channel, message)
 
     if (messageCount >= maxMessageCount) {
       await dispatch(removeFirstMessage())
     }
 
-    await dispatch(appendMessage({
-      id: generateRandomString(),
-      time: new Date().toISOString(),
-      source: MessageSource.Client,
-      body: message,
-    }))
-
     track('send_message')
     showSuccessAlert(t('請求已送出'))
   }
 
-  const enableScheduler = async (message, timeInterval) => {
-    scheduler.enable(async () => {
-      await sendMessage(message)
-    }, timeInterval)
-    await dispatch(changeScheduleEnabledStatus(true))
-  }
-
-  const disableScheduler = async () => {
-    scheduler.disable()
-    await dispatch(changeScheduleEnabledStatus(false))
+  const subscribeChannel = async (channel) => {
+    ipcRenderer.send('subscribe', channel)
   }
 
   const throwError = (message) => {
@@ -102,13 +90,7 @@ export default function AppController({children}) {
   useAsyncEffect(async () => {
     await dispatch(changeProjectState(LoadingState.Loading))
 
-    const wsClient = new WSClient()
-    wsClient.setOnConnectionChange(connectionState => dispatch(changeConnectionState(connectionState)))
-    wsClient.setOnError(error => {
-      console.log(error)
-      showErrorAlert(t('連線建立失敗'))
-    })
-    wsClient.setOnNewMessage(async message => {
+    ipcRenderer.on('new-message', async (event, message) => {
       if (messageCount >= maxMessageCount) {
         await dispatch(removeFirstMessage())
       }
@@ -120,14 +102,6 @@ export default function AppController({children}) {
         body: message,
       }))
     })
-    wsClient.setOnClose(() => {
-      scheduler.disable()
-      dispatch(changeScheduleEnabledStatus(false))
-    })
-    setWSClient(wsClient)
-
-    const scheduler = new Scheduler()
-    setScheduler(scheduler)
 
     const projectData = await loadProjectData()
     if (projectData) {
@@ -144,10 +118,8 @@ export default function AppController({children}) {
     connect,
     disconnect,
 
-    sendMessage,
-
-    enableScheduler,
-    disableScheduler,
+    publishMessage,
+    subscribeChannel,
 
     throwError,
   }

@@ -37,20 +37,22 @@ const PanelTab = Object.freeze({
 export default function RequestPanel({
                                        isConnected,
 
-                                       requestBody,
-                                       onRequestBodyChange,
+                                       subscribeChannel,
+                                       onSubscribeChannelChange,
 
-                                       scheduleTimeInterval,
-                                       onScheduleTimeIntervalChange,
+                                       publishChannel,
+                                       onPublishChannelChange,
 
-                                       onSendMessage,
+                                       publishMessageBody,
+                                       onPublishMessageBodyChange,
 
-                                       scheduleEnabled,
-                                       onEnableButtonClick,
+                                       onSubscribeChannel,
+
+                                       onPublishMessage,
                                      }) {
   const classes = useStyles()
   const {t} = useTranslation('ControlPanel')
-  const [tabValue, setTabValue] = useState(PanelTab.Publish)
+  const [tabValue, setTabValue] = useState(PanelTab.Subscribe)
 
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue)
@@ -60,32 +62,32 @@ export default function RequestPanel({
     <div className={classes.root}>
       <TabContext value={tabValue}>
         <TabList indicatorColor="secondary" aria-label={t('請求控制區')} value={tabValue} onChange={handleTabChange}>
-          <Tab className={classes.tab} label={t('Publish')} value={PanelTab.Publish}/>
-          <Tab className={classes.tab} label={t('Subscribe')} value={PanelTab.Subscribe}/>
+          <Tab className={classes.tab} label={t('訂閱')} value={PanelTab.Subscribe}/>
+          <Tab className={classes.tab} label={t('發布')} value={PanelTab.Publish}/>
         </TabList>
+
+        <TabPanel className={classes.tabPanel} value={PanelTab.Subscribe}>
+          <SubscribePanel
+            isConnected={isConnected}
+
+            channel={subscribeChannel}
+            onChannelChange={onSubscribeChannelChange}
+
+            onSubscribeChannel={onSubscribeChannel}
+          />
+        </TabPanel>
 
         <TabPanel className={classes.tabPanel} value={PanelTab.Publish}>
           <PublishPanel
             isConnected={isConnected}
 
-            requestBody={requestBody}
-            onRequestBodyChange={onRequestBodyChange}
+            channel={publishChannel}
+            onChannelChange={onPublishChannelChange}
 
-            onSendButtonClick={onSendMessage}
-          />
-        </TabPanel>
-        <TabPanel className={classes.tabPanel} value={PanelTab.Subscribe}>
-          <SubscribePanel
-            isConnected={isConnected}
+            messageBody={publishMessageBody}
+            onMessageBodyChange={onPublishMessageBodyChange}
 
-            requestBody={requestBody}
-            onRequestBodyChange={onRequestBodyChange}
-
-            scheduleTimeInterval={scheduleTimeInterval}
-            onScheduleTimeIntervalChange={onScheduleTimeIntervalChange}
-
-            scheduleEnabled={scheduleEnabled}
-            onEnableButtonClick={onEnableButtonClick}
+            onPublishMessage={onPublishMessage}
           />
         </TabPanel>
       </TabContext>
@@ -96,14 +98,12 @@ export default function RequestPanel({
 RequestPanel.propTypes = {
   isConnected: PropTypes.bool.isRequired,
 
+  channel: PropTypes.string.isRequired,
+  onChannelChange: PropTypes.func.isRequired,
+
   requestBody: PropTypes.string.isRequired,
   onRequestBodyChange: PropTypes.func.isRequired,
 
-  scheduleTimeInterval: PropTypes.number.isRequired,
-  onScheduleTimeIntervalChange: PropTypes.func.isRequired,
-
-  onSendMessage: PropTypes.func.isRequired,
-
-  scheduleEnabled: PropTypes.bool.isRequired,
-  onEnableButtonClick: PropTypes.func.isRequired,
+  onSubscribeChannel: PropTypes.func.isRequired,
+  onPublishMessage: PropTypes.func.isRequired,
 }

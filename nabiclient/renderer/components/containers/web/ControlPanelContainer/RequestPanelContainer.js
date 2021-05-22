@@ -2,13 +2,8 @@ import React, {useState} from 'react'
 import {useTranslation} from 'next-i18next'
 import {useDispatch, useSelector} from 'react-redux'
 
-import {
-  getConnectionState,
-  getRequestBody,
-  getScheduleEnabledStatus,
-  getScheduleTimeInterval
-} from '../../../../selectors'
-import {changeRequestBody, changeScheduleTimeInterval} from '../../../../slices/project'
+import {getConnectionState, getPublishChannel, getPublishMessageBody, getSubscribeChannel} from '../../../../selectors'
+import {changePublishChannel, changePublishMessageBody, changeSubscribeChannel} from '../../../../slices/project'
 import {ConnectionState} from '../../../../constants'
 import RequestPanel from '../../../modules/web/ControlPanel/RequestPanel'
 
@@ -16,37 +11,42 @@ export default function RequestPanelContainer({appController}) {
   const dispatch = useDispatch()
   const {t} = useTranslation('ControlPanel')
   const connectionState = useSelector(getConnectionState)
-  const requestBody = useSelector(getRequestBody)
-  const scheduleEnabled = useSelector(getScheduleEnabledStatus)
-  const timeInterval = useSelector(getScheduleTimeInterval)
-  const [localRequestBody, setLocalRequestBody] = useState(requestBody)
-  const [localScheduleTimeInterval, setLocalTimeInterval] = useState(timeInterval)
+  const subscribeChannel = useSelector(getSubscribeChannel)
+  const publishChannel = useSelector(getPublishChannel)
+  const publishMessageBody = useSelector(getPublishMessageBody)
 
-  const onRequestBodyChange = (value) => {
-    setLocalRequestBody(value)
-    dispatch(changeRequestBody(localRequestBody))
+  const [localSubscribeChannel, setLocalSubscribeChannel] = useState(subscribeChannel)
+  const [localPublishChannel, setLocalPublishChannel] = useState(publishChannel)
+  const [localPublishMessageBody, setLocalPublishMessageBody] = useState(publishMessageBody)
+
+  const onSubscribeChannelChange = (value) => {
+    setLocalSubscribeChannel(value)
+    dispatch(changeSubscribeChannel(value))
   }
 
-  const onScheduleTimeIntervalChange = (timeInterval) => {
-    setLocalTimeInterval(+timeInterval)
-    dispatch(changeScheduleTimeInterval(+localScheduleTimeInterval))
+  const onPublishChannelChange = (value) => {
+    setLocalPublishChannel(value)
+    dispatch(changePublishChannel(value))
   }
 
-  const onSendMessage = async () => {
-    dispatch(changeRequestBody(localRequestBody))
+  const onPublishMessageBodyChange = (value) => {
+    setLocalPublishMessageBody(value)
+    dispatch(changePublishMessageBody(value))
+  }
+
+  const onSubscribeChannel = () => {
+    appController.subscribeChannel(localSubscribeChannel)
+  }
+
+  const onPublishMessage = async () => {
+    dispatch(changePublishChannel(localPublishChannel))
+    dispatch(changePublishMessageBody(localPublishMessageBody))
+
     try {
-      await appController.sendMessage(localRequestBody)
+      await appController.publishMessage(localPublishChannel, localPublishMessageBody)
     } catch (e) {
       console.log(e)
       appController.throwError(t('請求傳送失敗'))
-    }
-  }
-
-  const onEnableButtonClick = async () => {
-    if (scheduleEnabled) {
-      await appController.disableScheduler()
-    } else {
-      await appController.enableScheduler(localRequestBody, +localScheduleTimeInterval)
     }
   }
 
@@ -57,16 +57,17 @@ export default function RequestPanelContainer({appController}) {
       <RequestPanel
         isConnected={isConnected}
 
-        requestBody={localRequestBody}
-        onRequestBodyChange={onRequestBodyChange}
+        subscribeChannel={localSubscribeChannel}
+        onSubscribeChannelChange={onSubscribeChannelChange}
 
-        scheduleTimeInterval={localScheduleTimeInterval}
-        onScheduleTimeIntervalChange={onScheduleTimeIntervalChange}
+        publishChannel={localPublishChannel}
+        onPublishChannelChange={onPublishChannelChange}
 
-        onSendMessage={onSendMessage}
+        publishMessageBody={localPublishMessageBody}
+        onPublishMessageBodyChange={onPublishMessageBodyChange}
 
-        scheduleEnabled={scheduleEnabled}
-        onEnableButtonClick={onEnableButtonClick}
+        onSubscribeChannel={onSubscribeChannel}
+        onPublishMessage={onPublishMessage}
       />
     </>
   )

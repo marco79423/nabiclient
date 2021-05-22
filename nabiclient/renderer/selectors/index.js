@@ -1,5 +1,5 @@
 import {createDraftSafeSelector} from '@reduxjs/toolkit'
-import {favoriteRequestAdapter, messageAdapter} from '../slices/project'
+import {messageAdapter} from '../slices/project'
 
 
 export const getProjectState = state => state.current.projectState
@@ -20,12 +20,11 @@ export const getSettingMaxMessageCount = state => state.project.setting.maxMessa
 
 export const getConnectionUrl = state => state.project.connection.url
 
-export const getRequestBody = state => state.project.request.body
+export const getSubscribeChannel = state => state.project.subscribe.channel
 
-export const getScheduleTimeInterval = state => state.project.schedule.timeInterval
+export const getPublishChannel = state => state.project.publish.channel
 
-const favoriteRequestSelectors = favoriteRequestAdapter.getSelectors(state => state.project.favoriteRequest)
-export const getFavoriteRequests = state => favoriteRequestSelectors.selectAll(state)
+export const getPublishMessageBody = state => state.project.publish.messageBody
 
 const messageSelectors = messageAdapter.getSelectors(state => state.project.message)
 export const getMessageCount = state => messageSelectors.selectTotal(state)

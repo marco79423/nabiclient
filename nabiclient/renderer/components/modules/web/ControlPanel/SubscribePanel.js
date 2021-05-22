@@ -5,22 +5,21 @@ import {Grid, makeStyles, Paper} from '@material-ui/core'
 
 import Button from '../../../elements/Button'
 import TextArea from '../../../elements/TextArea'
-import NumberField from '../../../elements/NumberField'
-
+import TextField from '../../../elements/TextField'
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
-    
+
     height: '100%',
     maxHeight: 500,
     padding: theme.spacing(3),
-    
+
     borderTopLeftRadius: 0,
   },
   controlBar: {
-    textAlign: 'right',
+    height: 60,
   },
   requestBody: {
     flex: 1,
@@ -29,55 +28,32 @@ const useStyles = makeStyles((theme) => ({
   },
   bottomActions: {
     marginTop: theme.spacing(4),
-  },
+  }
 }))
 
 export default function SubscribePanel({
-                                               isConnected,
-                                               scheduleTimeInterval,
-                                               scheduleEnabled,
-                                               requestBody,
-                                               onRequestBodyChange,
-                                               onScheduleTimeIntervalChange,
-                                               onEnableButtonClick,
-                                             }) {
+                                       isConnected,
+                                       channel,
+                                       onChannelChange,
+                                       onSubscribeChannel
+                                     }) {
   const classes = useStyles()
   const {t} = useTranslation('ControlPanel')
-
-  const validTimeInterval = +scheduleTimeInterval > 0
 
   return (
     <Paper className={classes.root}>
       <div className={classes.controlBar}>
-      </div>
-      <div className={classes.requestBody}>
-        <TextArea
-          label={t('請求內容')}
-          value={requestBody}
-          onChange={onRequestBodyChange}
+        <TextField
+          label={t('頻道')}
+          value={channel}
+          onChange={onChannelChange}
         />
       </div>
-      <Grid className={classes.bottomActions} container alignItems="center" justify="space-between">
+      <Grid className={classes.bottomActions} container justify="space-between">
         <Grid item>
-
         </Grid>
         <Grid item>
-          <Grid container alignItems="center" spacing={3}>
-            <Grid item>
-              <Grid container alignItems="center" spacing={1}>
-                <Grid item>{t('每')}</Grid>
-                <Grid item><NumberField type="number" disabled={scheduleEnabled} error={!validTimeInterval}
-                                        onChange={onScheduleTimeIntervalChange}
-                                        value={scheduleTimeInterval}/></Grid>
-                <Grid item>{t('秒傳送一次')}</Grid>
-              </Grid>
-            </Grid>
-            <Grid item>
-              <Button primary disabled={!isConnected || !validTimeInterval} onClick={onEnableButtonClick}>
-                {scheduleEnabled ? t('停用') : t('啟用')}
-              </Button>
-            </Grid>
-          </Grid>
+          <Button primary disabled={!isConnected} onClick={onSubscribeChannel}>{t('訂閱')}</Button>
         </Grid>
       </Grid>
     </Paper>
@@ -86,10 +62,7 @@ export default function SubscribePanel({
 
 SubscribePanel.propTypes = {
   isConnected: PropTypes.bool.isRequired,
-  scheduleTimeInterval: PropTypes.number.isRequired,
-  requestBody: PropTypes.string.isRequired,
-  scheduleEnabled: PropTypes.bool.isRequired,
-  onRequestBodyChange: PropTypes.func.isRequired,
-  onScheduleTimeIntervalChange: PropTypes.func.isRequired,
-  onEnableButtonClick: PropTypes.func.isRequired,
+  channel: PropTypes.string.isRequired,
+  onChannelChange: PropTypes.func.isRequired,
+  onSubscribeChannel: PropTypes.func.isRequired,
 }

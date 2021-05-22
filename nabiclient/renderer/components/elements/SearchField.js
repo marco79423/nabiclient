@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import PropTypes from 'prop-types'
 
-import TextField from './TextField'
+import TextFieldWithAction from './TextFieldWithAction'
 import LinkButton from './LinkButton'
 
 
@@ -23,7 +23,7 @@ export default function SearchField({placeholder, defaultValue, onSearch, button
   }
 
   return (
-    <TextField
+    <TextFieldWithAction
       placeholder={placeholder}
       value={value}
       onChange={onValueChange}

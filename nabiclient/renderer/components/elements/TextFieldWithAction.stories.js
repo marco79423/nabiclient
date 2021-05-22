@@ -1,15 +1,15 @@
 import React from 'react'
-import TextField from './TextField'
+import TextFieldWithAction from './TextFieldWithAction'
 import Button from './Button'
 
 
 export default {
-  title: 'elements/TextField',
-  component: TextField,
+  title: 'elements/TextFieldWithAction',
+  component: TextFieldWithAction,
 }
 
 
-const Template = (args) => <TextField {...args} />
+const Template = (args) => <TextFieldWithAction {...args} />
 
 export const Default = Template.bind({})
 Default.args = {

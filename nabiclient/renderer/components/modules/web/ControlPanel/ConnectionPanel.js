@@ -5,7 +5,7 @@ import {makeStyles} from '@material-ui/core/styles'
 
 import {ConnectionState} from '../../../../constants'
 import LinkButton from '../../../elements/LinkButton'
-import TextField from '../../../elements/TextField'
+import TextFieldWithAction from '../../../elements/TextFieldWithAction'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -58,7 +58,7 @@ export default function ConnectionPanel({state, url, connect, disconnect}) {
   const isValidUrl = true // 暫時不檢查 url
 
   return (
-    <TextField
+    <TextFieldWithAction
       className={classes.root}
       large
       placeholder={t('欲連線的網址')}
