@@ -5,8 +5,8 @@ import {makeStyles} from '@material-ui/core/styles'
 import {Tab} from '@material-ui/core'
 import {TabContext, TabList, TabPanel} from '@material-ui/lab'
 
-import ScheduleRequestPanel from './ScheduleRequestPanel'
-import BasicRequestPanel from './BasicRequestPanel'
+import SubscribePanel from './SubscribePanel'
+import PublishPanel from './PublishPanel'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -30,8 +30,8 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const PanelTab = Object.freeze({
-  Basic: 'basic',
-  Schedule: 'schedule',
+  Publish: 'publish',
+  Subscribe: 'subscribe',
 })
 
 export default function RequestPanel({
@@ -55,7 +55,7 @@ export default function RequestPanel({
                                      }) {
   const classes = useStyles()
   const {t} = useTranslation('ControlPanel')
-  const [tabValue, setTabValue] = useState(PanelTab.Basic)
+  const [tabValue, setTabValue] = useState(PanelTab.Publish)
 
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue)
@@ -65,12 +65,12 @@ export default function RequestPanel({
     <div className={classes.root}>
       <TabContext value={tabValue}>
         <TabList indicatorColor="secondary" aria-label={t('請求控制區')} value={tabValue} onChange={handleTabChange}>
-          <Tab className={classes.tab} label={t('基本')} value={PanelTab.Basic}/>
-          <Tab className={classes.tab} label={t('排程')} value={PanelTab.Schedule}/>
+          <Tab className={classes.tab} label={t('Publish')} value={PanelTab.Publish}/>
+          <Tab className={classes.tab} label={t('Subscribe')} value={PanelTab.Subscribe}/>
         </TabList>
 
-        <TabPanel className={classes.tabPanel} value={PanelTab.Basic}>
-          <BasicRequestPanel
+        <TabPanel className={classes.tabPanel} value={PanelTab.Publish}>
+          <PublishPanel
             isConnected={isConnected}
 
             favoriteRequestID={favoriteRequestID}
@@ -84,8 +84,8 @@ export default function RequestPanel({
             onSendButtonClick={onSendMessage}
           />
         </TabPanel>
-        <TabPanel className={classes.tabPanel} value={PanelTab.Schedule}>
-          <ScheduleRequestPanel
+        <TabPanel className={classes.tabPanel} value={PanelTab.Subscribe}>
+          <SubscribePanel
             isConnected={isConnected}
 
             favoriteRequestID={favoriteRequestID}

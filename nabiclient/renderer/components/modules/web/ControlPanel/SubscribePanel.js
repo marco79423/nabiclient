@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-export default function ScheduleRequestPanel({
+export default function SubscribePanel({
                                                isConnected,
                                                scheduleTimeInterval,
                                                favoriteRequestID,
@@ -99,7 +99,7 @@ export default function ScheduleRequestPanel({
   )
 }
 
-ScheduleRequestPanel.propTypes = {
+SubscribePanel.propTypes = {
   isConnected: PropTypes.bool.isRequired,
   scheduleTimeInterval: PropTypes.number.isRequired,
   requestBody: PropTypes.string.isRequired,

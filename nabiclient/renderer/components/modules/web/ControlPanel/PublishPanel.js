@@ -5,6 +5,7 @@ import {Grid, makeStyles, Paper} from '@material-ui/core'
 
 import Button from '../../../elements/Button'
 import TextArea from '../../../elements/TextArea'
+import TextField from '../../../elements/TextField'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -30,31 +31,22 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-export default function BasicRequestPanel({
+export default function PublishPanel({
                                             isConnected,
                                             requestBody,
-                                            favoriteRequestID,
                                             onRequestBodyChange,
-                                            onShowFavoriteRequestsClick,
-                                            onFavoriteRequestSet,
-                                            onFavoriteRequestUnset,
                                             onSendButtonClick
                                           }) {
   const classes = useStyles()
   const {t} = useTranslation('ControlPanel')
 
-  const onSetFavoriteRequestButtonClick = () => {
-    if (favoriteRequestID) {
-      onFavoriteRequestUnset()
-    } else {
-      onFavoriteRequestSet()
-    }
-  }
-
   return (
     <Paper className={classes.root}>
       <div className={classes.controlBar}>
-        <Button onClick={onShowFavoriteRequestsClick}>{t('展開常用列表')}</Button>
+        <TextField
+          value={requestBody}
+          onChange={onRequestBodyChange}
+        />
       </div>
       <div className={classes.requestBody}>
         <TextArea
@@ -65,7 +57,6 @@ export default function BasicRequestPanel({
       </div>
       <Grid className={classes.bottomActions} container justify="space-between">
         <Grid item>
-          <Button onClick={onSetFavoriteRequestButtonClick}>{favoriteRequestID ? t('取消常用') : t('設為常用')}</Button>
         </Grid>
         <Grid item>
           <Button primary disabled={!isConnected} onClick={onSendButtonClick}>{t('送出')}</Button>
@@ -75,7 +66,7 @@ export default function BasicRequestPanel({
   )
 }
 
-BasicRequestPanel.propTypes = {
+PublishPanel.propTypes = {
   isConnected: PropTypes.bool.isRequired,
   requestBody: PropTypes.string.isRequired,
   favoriteRequestID: PropTypes.string,

@@ -39,7 +39,7 @@ const projectSlice = createSlice({
 
     // 連線資訊
     connection: {
-      url: 'wss://echo.websocket.org',
+      url: 'localhost:4222',
     },
 
     // 請求
