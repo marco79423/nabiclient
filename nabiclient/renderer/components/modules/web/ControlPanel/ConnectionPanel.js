@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import {useTranslation} from 'next-i18next'
 import {makeStyles} from '@material-ui/core/styles'
 
-import validateWebsocketUrl from '../../../../utils/validateWebsocketUrl'
 import {ConnectionState} from '../../../../constants'
 import LinkButton from '../../../elements/LinkButton'
 import TextField from '../../../elements/TextField'
@@ -56,7 +55,7 @@ export default function ConnectionPanel({state, url, connect, disconnect}) {
     }
   }
 
-  const isValidWSUrl = validateWebsocketUrl(localUrl)
+  const isValidUrl = true // 暫時不檢查 url
 
   return (
     <TextField
@@ -66,12 +65,12 @@ export default function ConnectionPanel({state, url, connect, disconnect}) {
       value={localUrl}
       onChange={onChange}
       disabled={state !== ConnectionState.Idle}
-      error={!isValidWSUrl}
+      error={!isValidUrl}
       action={
         <LinkButton
           primary
           large
-          disabled={(state === ConnectionState.Connecting || state === ConnectionState.Closing) || !isValidWSUrl}
+          disabled={(state === ConnectionState.Connecting || state === ConnectionState.Closing) || !isValidUrl}
           onClick={onButtonClicked}
         >{buttonLabel}</LinkButton>
       }

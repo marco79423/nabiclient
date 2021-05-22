@@ -5,7 +5,6 @@ import {favoriteRequestAdapter, messageAdapter} from '../slices/project'
 export const getProjectState = state => state.current.projectState
 export const getConnectionState = state => state.current.connectionState
 export const getSelectedMessageID = state => state.current.selectedMessageID
-export const getAppliedFavoriteRequestID = state => state.current.appliedFavoriteRequestID
 export const getScheduleEnabledStatus = state => state.current.scheduleEnabled
 export const getShareLink = state => state.current.shareLink
 

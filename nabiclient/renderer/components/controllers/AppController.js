@@ -14,13 +14,7 @@ import {changeConnectionState, changeProjectState, changeScheduleEnabledStatus} 
 import {LoadingState, MessageSource} from '../../constants'
 import {appendMessage, removeFirstMessage, setProjectData} from '../../slices/project'
 import generateRandomString from '../../utils/generateRandomString'
-import {
-  loadProjectDataFromFile,
-  loadProjectDataFromLocalStorage,
-  loadProjectDataFromSharingServer,
-  saveProjectDataToSharingServer
-} from '../../features/project'
-import {downloadJsonData} from '../../utils/jsDownloader'
+import {loadProjectDataFromLocalStorage,} from '../../features/project'
 import WSClient from '../../utils/WSClient'
 import Scheduler from '../../utils/Scheduler'
 import Alert from '../elements/Alert'
@@ -101,24 +95,6 @@ export default function AppController({children}) {
     await dispatch(changeScheduleEnabledStatus(false))
   }
 
-  const exportProject = ({filename, messageIncluded}) => {
-    downloadJsonData(filename, messageIncluded ? projectData : projectDataWithoutMessages)
-    track('export_project', {messageIncluded})
-  }
-
-  const importProject = async () => {
-    const projectData = await loadProjectDataFromFile()
-    dispatch(setProjectData(projectData))
-    track('import_project')
-  }
-
-  const generateShareLink = async ({messageIncluded}) => {
-    const projectCode = await saveProjectDataToSharingServer(messageIncluded ? projectData : projectDataWithoutMessages)
-    const shareLink = `${window.location.origin}?projectCode=${projectCode}`
-    track('generate_share_link', {messageIncluded})
-    return shareLink
-  }
-
   const throwError = (message) => {
     showErrorAlert(message)
   }
@@ -172,11 +148,6 @@ export default function AppController({children}) {
 
     enableScheduler,
     disableScheduler,
-
-    exportProject,
-    importProject,
-
-    generateShareLink,
 
     throwError,
   }

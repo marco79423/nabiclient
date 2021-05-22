@@ -40,11 +40,6 @@ export default function RequestPanel({
                                        requestBody,
                                        onRequestBodyChange,
 
-                                       favoriteRequestID,
-                                       showFavoriteRequestDialog,
-                                       onFavoriteRequestSet,
-                                       onFavoriteRequestUnset,
-
                                        scheduleTimeInterval,
                                        onScheduleTimeIntervalChange,
 
@@ -73,11 +68,6 @@ export default function RequestPanel({
           <PublishPanel
             isConnected={isConnected}
 
-            favoriteRequestID={favoriteRequestID}
-            onShowFavoriteRequestsClick={showFavoriteRequestDialog}
-            onFavoriteRequestSet={onFavoriteRequestSet}
-            onFavoriteRequestUnset={onFavoriteRequestUnset}
-
             requestBody={requestBody}
             onRequestBodyChange={onRequestBodyChange}
 
@@ -87,11 +77,6 @@ export default function RequestPanel({
         <TabPanel className={classes.tabPanel} value={PanelTab.Subscribe}>
           <SubscribePanel
             isConnected={isConnected}
-
-            favoriteRequestID={favoriteRequestID}
-            onShowFavoriteRequestsClick={showFavoriteRequestDialog}
-            onFavoriteRequestSet={onFavoriteRequestSet}
-            onFavoriteRequestUnset={onFavoriteRequestUnset}
 
             requestBody={requestBody}
             onRequestBodyChange={onRequestBodyChange}
@@ -113,11 +98,6 @@ RequestPanel.propTypes = {
 
   requestBody: PropTypes.string.isRequired,
   onRequestBodyChange: PropTypes.func.isRequired,
-
-  favoriteRequestID: PropTypes.string,
-  showFavoriteRequestDialog: PropTypes.func.isRequired,
-  onFavoriteRequestSet: PropTypes.func.isRequired,
-  onFavoriteRequestUnset: PropTypes.func.isRequired,
 
   scheduleTimeInterval: PropTypes.number.isRequired,
   onScheduleTimeIntervalChange: PropTypes.func.isRequired,

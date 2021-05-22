@@ -69,10 +69,6 @@ export default function PublishPanel({
 PublishPanel.propTypes = {
   isConnected: PropTypes.bool.isRequired,
   requestBody: PropTypes.string.isRequired,
-  favoriteRequestID: PropTypes.string,
   onRequestBodyChange: PropTypes.func.isRequired,
-  onShowFavoriteRequestsClick: PropTypes.func.isRequired,
-  onFavoriteRequestSet: PropTypes.func.isRequired,
-  onFavoriteRequestUnset: PropTypes.func.isRequired,
   onSendButtonClick: PropTypes.func.isRequired,
 }

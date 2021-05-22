@@ -35,28 +35,16 @@ const useStyles = makeStyles((theme) => ({
 export default function SubscribePanel({
                                                isConnected,
                                                scheduleTimeInterval,
-                                               favoriteRequestID,
                                                scheduleEnabled,
                                                requestBody,
                                                onRequestBodyChange,
                                                onScheduleTimeIntervalChange,
-                                               onShowFavoriteRequestsClick,
-                                               onFavoriteRequestSet,
-                                               onFavoriteRequestUnset,
                                                onEnableButtonClick,
                                              }) {
   const classes = useStyles()
   const {t} = useTranslation('ControlPanel')
 
   const validTimeInterval = +scheduleTimeInterval > 0
-
-  const onSetFavoriteRequestButtonClick = () => {
-    if (favoriteRequestID) {
-      onFavoriteRequestUnset()
-    } else {
-      onFavoriteRequestSet()
-    }
-  }
 
   return (
     <Paper className={classes.root}>
@@ -100,12 +88,8 @@ SubscribePanel.propTypes = {
   isConnected: PropTypes.bool.isRequired,
   scheduleTimeInterval: PropTypes.number.isRequired,
   requestBody: PropTypes.string.isRequired,
-  favoriteRequestID: PropTypes.string,
   scheduleEnabled: PropTypes.bool.isRequired,
   onRequestBodyChange: PropTypes.func.isRequired,
   onScheduleTimeIntervalChange: PropTypes.func.isRequired,
-  onShowFavoriteRequestsClick: PropTypes.func.isRequired,
-  onFavoriteRequestSet: PropTypes.func.isRequired,
-  onFavoriteRequestUnset: PropTypes.func.isRequired,
   onEnableButtonClick: PropTypes.func.isRequired,
 }
