@@ -11,7 +11,12 @@ import {
   getProjectDataWithoutMessages,
   getSettingMaxMessageCount
 } from '../../selectors'
-import {changeConnectionState, changeProjectState, changeScheduleEnabledStatus} from '../../slices/current'
+import {
+  changeConnectionState,
+  changeProjectState,
+  changeScheduleEnabledStatus,
+  changeSubscribedStatus
+} from '../../slices/current'
 import {ConnectionState, LoadingState, MessageSource} from '../../constants'
 import {appendMessage, removeFirstMessage, setProjectData} from '../../slices/project'
 import generateRandomString from '../../utils/generateRandomString'
@@ -81,6 +86,12 @@ export default function AppController({children}) {
 
   const subscribeChannel = async (channel) => {
     ipcRenderer.send('subscribe', channel)
+    dispatch(changeSubscribedStatus(true))
+  }
+
+  const unsubscribeChannel = async () => {
+    ipcRenderer.send('unsubscribe')
+    dispatch(changeSubscribedStatus(false))
   }
 
   const throwError = (message) => {
@@ -120,6 +131,7 @@ export default function AppController({children}) {
 
     publishMessage,
     subscribeChannel,
+    unsubscribeChannel,
 
     throwError,
   }

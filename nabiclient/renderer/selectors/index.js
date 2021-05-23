@@ -5,8 +5,7 @@ import {messageAdapter} from '../slices/project'
 export const getProjectState = state => state.current.projectState
 export const getConnectionState = state => state.current.connectionState
 export const getSelectedMessageID = state => state.current.selectedMessageID
-export const getScheduleEnabledStatus = state => state.current.scheduleEnabled
-export const getShareLink = state => state.current.shareLink
+export const getIsSubscribed = state => state.current.isSubscribed
 
 export const getProjectData = state => state.project
 export const getProjectDataWithoutMessages = createDraftSafeSelector(

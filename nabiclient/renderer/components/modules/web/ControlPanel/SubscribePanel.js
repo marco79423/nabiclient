@@ -4,7 +4,6 @@ import {useTranslation} from 'next-i18next'
 import {Grid, makeStyles, Paper} from '@material-ui/core'
 
 import Button from '../../../elements/Button'
-import TextArea from '../../../elements/TextArea'
 import TextField from '../../../elements/TextField'
 
 const useStyles = makeStyles((theme) => ({
@@ -32,11 +31,13 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function SubscribePanel({
-                                       isConnected,
-                                       channel,
-                                       onChannelChange,
-                                       onSubscribeChannel
-                                     }) {
+                                         isConnected,
+                                         channel,
+                                         onChannelChange,
+                                         isSubscribed,
+                                         onSubscribeChannel,
+                                         onUnsubscribeChannel,
+                                       }) {
   const classes = useStyles()
   const {t} = useTranslation('ControlPanel')
 
@@ -53,7 +54,7 @@ export default function SubscribePanel({
         <Grid item>
         </Grid>
         <Grid item>
-          <Button primary disabled={!isConnected} onClick={onSubscribeChannel}>{t('訂閱')}</Button>
+          <Button primary disabled={!isConnected} onClick={isSubscribed ? onUnsubscribeChannel : onSubscribeChannel}>{isSubscribed ? t('取消訂閱') : t('訂閱')}</Button>
         </Grid>
       </Grid>
     </Paper>

@@ -46,7 +46,9 @@ export default function RequestPanel({
                                        publishMessageBody,
                                        onPublishMessageBodyChange,
 
+                                       isSubscribed,
                                        onSubscribeChannel,
+                                       onUnsubscribeChannel,
 
                                        onPublishMessage,
                                      }) {
@@ -73,7 +75,9 @@ export default function RequestPanel({
             channel={subscribeChannel}
             onChannelChange={onSubscribeChannelChange}
 
+            isSubscribed={isSubscribed}
             onSubscribeChannel={onSubscribeChannel}
+            onUnsubscribeChannel={onUnsubscribeChannel}
           />
         </TabPanel>
 
@@ -98,12 +102,18 @@ export default function RequestPanel({
 RequestPanel.propTypes = {
   isConnected: PropTypes.bool.isRequired,
 
-  channel: PropTypes.string.isRequired,
-  onChannelChange: PropTypes.func.isRequired,
+  subscribeChannel: PropTypes.string.isRequired,
+  onSubscribeChannelChange: PropTypes.func.isRequired,
 
-  requestBody: PropTypes.string.isRequired,
-  onRequestBodyChange: PropTypes.func.isRequired,
+   publishChannel: PropTypes.string.isRequired,
+  onPublishChannelChange: PropTypes.func.isRequired,
 
+  publishMessageBody: PropTypes.string.isRequired,
+  onPublishMessageBodyChange: PropTypes.func.isRequired,
+
+  isSubscribed: PropTypes.bool.isRequired,
   onSubscribeChannel: PropTypes.func.isRequired,
+  onUnsubscribeChannel: PropTypes.func.isRequired,
+
   onPublishMessage: PropTypes.func.isRequired,
 }

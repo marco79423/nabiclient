@@ -2,7 +2,13 @@ import React, {useState} from 'react'
 import {useTranslation} from 'next-i18next'
 import {useDispatch, useSelector} from 'react-redux'
 
-import {getConnectionState, getPublishChannel, getPublishMessageBody, getSubscribeChannel} from '../../../../selectors'
+import {
+  getConnectionState,
+  getIsSubscribed,
+  getPublishChannel,
+  getPublishMessageBody,
+  getSubscribeChannel
+} from '../../../../selectors'
 import {changePublishChannel, changePublishMessageBody, changeSubscribeChannel} from '../../../../slices/project'
 import {ConnectionState} from '../../../../constants'
 import RequestPanel from '../../../modules/web/ControlPanel/RequestPanel'
@@ -11,6 +17,7 @@ export default function RequestPanelContainer({appController}) {
   const dispatch = useDispatch()
   const {t} = useTranslation('ControlPanel')
   const connectionState = useSelector(getConnectionState)
+  const isSubscribed = useSelector(getIsSubscribed)
   const subscribeChannel = useSelector(getSubscribeChannel)
   const publishChannel = useSelector(getPublishChannel)
   const publishMessageBody = useSelector(getPublishMessageBody)
@@ -36,6 +43,10 @@ export default function RequestPanelContainer({appController}) {
 
   const onSubscribeChannel = () => {
     appController.subscribeChannel(localSubscribeChannel)
+  }
+
+  const onUnsubscribeChannel = async () => {
+    await appController.unsubscribeChannel()
   }
 
   const onPublishMessage = async () => {
@@ -66,7 +77,9 @@ export default function RequestPanelContainer({appController}) {
         publishMessageBody={localPublishMessageBody}
         onPublishMessageBodyChange={onPublishMessageBodyChange}
 
+        isSubscribed={isSubscribed}
         onSubscribeChannel={onSubscribeChannel}
+        onUnsubscribeChannel={onUnsubscribeChannel}
         onPublishMessage={onPublishMessage}
       />
     </>

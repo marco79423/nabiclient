@@ -10,11 +10,7 @@ export const changeConnectionState = createAction('current/changeConnectionState
 
 export const setSelectedMessageID = createAction('current/setSelectedMessageID')
 
-export const changeScheduleEnabledStatus = createAction('current/changeScheduleEnabledStatus')
-
-export const changeShareLink = createAction('current/changeShareLink')
-
-export const clearShareLink = createAction('current/clearShareLink')
+export const changeSubscribedStatus = createAction('current/changeSubscribedStatus')
 
 // Slice
 const currentSlice = createSlice({
@@ -23,8 +19,7 @@ const currentSlice = createSlice({
     projectState: LoadingState.Idle, // idle, loading, loaded, failed
     connectionState: ConnectionState.Idle, // idle, connecting, connected, closed
     selectedMessageID: null,
-    scheduleEnabled: false,
-    shareLink: '',
+    isSubscribed: false,
   },
   extraReducers: {
     [changeProjectState]: (state, action) => {
@@ -36,14 +31,8 @@ const currentSlice = createSlice({
     [setSelectedMessageID]: (state, action) => {
       state.selectedMessageID = action.payload
     },
-    [changeScheduleEnabledStatus]: (state, action) => {
-      state.scheduleEnabled = action.payload
-    },
-    [changeShareLink]: (state, action) => {
-      state.shareLink = action.payload
-    },
-    [clearShareLink]: (state) => {
-      state.shareLink = ''
+    [changeSubscribedStatus]: (state, action) => {
+      state.isSubscribed = action.payload
     },
   }
 })

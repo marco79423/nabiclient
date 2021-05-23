@@ -40,13 +40,16 @@ app.on('window-all-closed', () => {
 
 
 let natsClient
+let subscription
+
 ipcMain.on('connect', async (event, {url}) => {
   natsClient = await connect(url)
 
   console.log('main connect', url)
 })
 
-ipcMain.on('disconnect', (event) => {
+ipcMain.on('disconnect', async (event) => {
+  await natsClient.drain()
   natsClient = null
 })
 
@@ -58,10 +61,16 @@ ipcMain.on('publish', (event, channel, message) => {
 
 ipcMain.on('subscribe', async (event, channel) => {
   const sc = StringCodec()
-  const sub = natsClient.subscribe(channel)
+  subscription = natsClient.subscribe(channel)
   console.log('main subscribe', channel)
-  for await (const m of sub) {
+  for await (const m of subscription) {
     event.reply('new-message', sc.decode(m.data))
-    console.log('main new message', channel, sc.decode(m.data))
+    console.log('main new message', channel, sc.decode(m.data), m.subject)
   }
+})
+
+ipcMain.on('unsubscribe', async (event ) => {
+  subscription.unsubscribe()
+  subscription = null
+  console.log('main unsubscribe')
 })

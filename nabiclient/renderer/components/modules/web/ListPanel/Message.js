@@ -34,10 +34,8 @@ export function Message({message, selectedMessageID, onSelectedMessageChange}) {
 
   const MessageTitle = ({message}) => {
     const time = new Date(message.time).toLocaleString()
-    const source = fromClient ? t('客戶端') : t('服務端')
-
     return (
-      <span className={classes.messageTitle}>{time} [{source}]</span>
+      <span className={classes.messageTitle}>{time}</span>
     )
   }
 
