@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useMemo, useState} from 'react'
 import PropTypes from 'prop-types'
 import lodash from 'lodash'
 
@@ -15,7 +15,7 @@ export default function MessageList({messages, selectedMessageID, onSelectedMess
     setHeight(windowHeight - 64 - 64)
   }, [windowHeight])
 
-  const listItems = lodash(messages)
+  const listItems = useMemo(() => lodash([...messages])
     .reverse()
     .map(message => (
       <Message
@@ -25,7 +25,7 @@ export default function MessageList({messages, selectedMessageID, onSelectedMess
         onSelectedMessageChange={onSelectedMessageChange}
       />
     ))
-    .value()
+    .value(), [messages, selectedMessageID])
 
   return (
     <List height={height}>
