@@ -1,8 +1,8 @@
 import React, {useCallback} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
-import * as projectActions from '../../../../slices/project'
-import * as currentActions from '../../../../slices/current'
-import {getMessages, getSelectedMessageID} from '../../../../selectors'
+import * as projectActions from '../../../../redux/project'
+import * as currentActions from '../../../../redux/current'
+import {getMessages, getSelectedMessageID} from '../../../../redux/selectors'
 import ListPanel from '../../../modules/web/ListPanel/ListPanel'
 
 

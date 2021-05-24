@@ -8,8 +8,8 @@ import {
   getPublishChannel,
   getPublishMessageBody,
   getSubscribeChannel
-} from '../../../../selectors'
-import {changePublishChannel, changePublishMessageBody, changeSubscribeChannel} from '../../../../slices/project'
+} from '../../../../redux/selectors'
+import {changePublishChannel, changePublishMessageBody, changeSubscribeChannel} from '../../../../redux/project'
 import {ConnectionState} from '../../../../constants'
 import RequestPanel from '../../../modules/web/ControlPanel/RequestPanel'
 

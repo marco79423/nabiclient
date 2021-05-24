@@ -1,5 +1,5 @@
 import {createDraftSafeSelector} from '@reduxjs/toolkit'
-import {messageAdapter} from '../slices/project'
+import {messageAdapter} from '../project'
 
 
 export const getProjectState = state => state.current.projectState
