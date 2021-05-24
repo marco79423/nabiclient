@@ -5,24 +5,12 @@ import useAsyncEffect from 'use-async-effect'
 import {useTranslation} from 'next-i18next'
 import {ipcRenderer} from 'electron'
 
-import {
-  getMessageCount,
-  getProjectData,
-  getProjectDataWithoutMessages,
-  getSettingMaxMessageCount
-} from '../../selectors'
-import {
-  changeConnectionState,
-  changeProjectState,
-  changeScheduleEnabledStatus,
-  changeSubscribedStatus
-} from '../../slices/current'
+import {getMessageCount, getSettingMaxMessageCount} from '../../selectors'
+import {changeConnectionState, changeProjectState, changeSubscribedStatus} from '../../slices/current'
 import {ConnectionState, LoadingState, MessageSource} from '../../constants'
-import {appendMessage, removeFirstMessage, setProjectData} from '../../slices/project'
+import {appendMessage, setProjectData} from '../../slices/project'
 import generateRandomString from '../../utils/generateRandomString'
 import {loadProjectDataFromLocalStorage,} from '../../features/project'
-import WSClient from '../../utils/WSClient'
-import Scheduler from '../../utils/Scheduler'
 import Alert from '../elements/Alert'
 
 
@@ -32,13 +20,9 @@ export default function AppController({children}) {
 
   const maxMessageCount = useSelector(getSettingMaxMessageCount)
   const messageCount = useSelector(getMessageCount)
-  const projectData = useSelector(getProjectData)
-  const projectDataWithoutMessages = useSelector(getProjectDataWithoutMessages)
   const track = useTrackFunc()
 
   const [alert, setAlert] = useState({})
-  const [wsClient, setWSClient] = useState(null)
-  const [scheduler, setScheduler] = useState(null)
 
   const showErrorAlert = (message) => {
     setAlert({
@@ -76,10 +60,6 @@ export default function AppController({children}) {
   const publishMessage = async (channel, message) => {
     ipcRenderer.send('publish', channel, message)
 
-    if (messageCount >= maxMessageCount) {
-      await dispatch(removeFirstMessage())
-    }
-
     track('send_message')
     showSuccessAlert(t('請求已送出'))
   }
@@ -102,10 +82,6 @@ export default function AppController({children}) {
     await dispatch(changeProjectState(LoadingState.Loading))
 
     ipcRenderer.on('new-message', async (event, message) => {
-      if (messageCount >= maxMessageCount) {
-        await dispatch(removeFirstMessage())
-      }
-
       await dispatch(appendMessage({
         id: generateRandomString(),
         time: new Date().toISOString(),
@@ -175,11 +151,6 @@ function useTrackFunc() {
 }
 
 async function loadProjectData() {
-  const projectCode = new URLSearchParams(window.location.search).get('projectCode')
-  if (projectCode) {
-    return await loadProjectDataFromSharingServer(projectCode)
-  }
-
   try {
     return await loadProjectDataFromLocalStorage()
   } catch {

@@ -16,9 +16,9 @@ export const changePublishMessageBody = createAction('project/publish/changePubl
 
 export const appendMessage = createAction('project/message/appendMessage')
 
-export const removeFirstMessage = createAction( 'project/message/removeFirstMessage')
+export const removeFirstMessage = createAction('project/message/removeFirstMessage')
 
-export const clearMessages = createAction(  'project/message/clearMessages')
+export const clearMessages = createAction('project/message/clearMessages')
 
 // Slice
 export const messageAdapter = createEntityAdapter()
@@ -27,7 +27,7 @@ const projectSlice = createSlice({
   initialState: {
     // 設定
     setting: {
-      maxMessageCount: 100,
+      maxMessageCount: 10,
     },
 
     // 連線資訊
@@ -66,10 +66,11 @@ const projectSlice = createSlice({
     [changePublishMessageBody]: (state, action) => {
       state.publish.messageBody = action.payload
     },
-    [removeFirstMessage]: (state) => {
-      messageAdapter.removeOne(state.message, state.message.ids[0])
-    },
     [appendMessage]: (state, action) => {
+      const maxMessageCount = state.setting.maxMessageCount
+      while (state.message.ids.length >= maxMessageCount) {
+        messageAdapter.removeOne(state.message, state.message.ids[0])
+      }
       messageAdapter.addOne(state.message, action.payload)
     },
     [clearMessages]: (state) => {

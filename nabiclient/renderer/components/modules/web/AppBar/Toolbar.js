@@ -65,7 +65,4 @@ export default function Toolbar({onShareButtonClick, onExportButtonClick, onImpo
 }
 
 Toolbar.propTypes = {
-  onShareButtonClick: PropTypes.func.isRequired,
-  onExportButtonClick: PropTypes.func.isRequired,
-  onImportButtonClick: PropTypes.func.isRequired,
 }

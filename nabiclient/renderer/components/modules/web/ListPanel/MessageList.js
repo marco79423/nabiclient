@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import PropTypes from 'prop-types'
+import lodash from 'lodash'
 
 import useWindowSize from '../../../hooks/useWindowSize'
 import List from '../../../elements/List'
@@ -14,16 +15,21 @@ export default function MessageList({messages, selectedMessageID, onSelectedMess
     setHeight(windowHeight - 64 - 64)
   }, [windowHeight])
 
+  const listItems = lodash(messages)
+    .reverse()
+    .map(message => (
+      <Message
+        key={message.id}
+        message={message}
+        selectedMessageID={selectedMessageID}
+        onSelectedMessageChange={onSelectedMessageChange}
+      />
+    ))
+    .value()
+
   return (
     <List height={height}>
-      {messages.map(message => (
-        <Message
-          key={message.id}
-          message={message}
-          selectedMessageID={selectedMessageID}
-          onSelectedMessageChange={onSelectedMessageChange}
-        />
-      ))}
+      {listItems}
     </List>
   )
 }
