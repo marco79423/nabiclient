@@ -57,11 +57,11 @@ export default function AppController({children}) {
     dispatch(changeConnectionState(ConnectionState.Idle))
   }
 
-  const publishMessage = async (channel, message) => {
-    ipcRenderer.send('publish', channel, message)
+  const publishMessage = async (channel, messageBody) => {
+    ipcRenderer.send('publish', channel, messageBody)
 
     track('send_message')
-    showSuccessAlert(t('請求已送出'))
+    showSuccessAlert(t('訊息已發布'))
   }
 
   const subscribeChannel = async (channel) => {
@@ -81,12 +81,12 @@ export default function AppController({children}) {
   useAsyncEffect(async () => {
     await dispatch(changeProjectState(LoadingState.Loading))
 
-    ipcRenderer.on('new-message', async (event, message) => {
+    ipcRenderer.on('new-message', async (event, subject, messageBody) => {
       await dispatch(appendMessage({
         id: generateRandomString(),
         time: new Date().toISOString(),
-        source: MessageSource.Server,
-        body: message,
+        subject: subject,
+        body: messageBody,
       }))
     })
 

@@ -38,7 +38,7 @@ MessageList.propTypes = {
   messages: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string.isRequired,
     time: PropTypes.string.isRequired,
-    source: PropTypes.string.isRequired,
+    subject: PropTypes.string.isRequired,
     body: PropTypes.string.isRequired,
   })).isRequired,
   selectedMessageID: PropTypes.string,

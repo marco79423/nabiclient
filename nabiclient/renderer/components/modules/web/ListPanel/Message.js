@@ -1,27 +1,28 @@
 import React, {memo} from 'react'
 import {useTranslation} from 'next-i18next'
 import {makeStyles} from '@material-ui/core/styles'
-
-import {MessageSource} from '../../../../constants'
 import ListItem from '../../../elements/ListItem'
 import PropTypes from 'prop-types'
 
 const useStyles = makeStyles((theme) => ({
-  messageTitle: ({fromClient}) => ({
-    color: fromClient ? theme.project.page.main.listPanel.message.client.textColor : theme.project.page.main.listPanel.message.server.textColor,
-    fontSize: '1rem',
-  }),
-  messageContent: ({fromClient}) => ({
+  messageSubject: {
+    color: theme.project.page.main.listPanel.message.server.textColor,
+    fontSize: '1.2rem',
+  },
+  messageTime: {
+    color: theme.project.page.main.listPanel.message.server.textColor,
+    fontSize: '0.8rem',
+  },
+  messageContent: {
     overflow: 'hidden',
     textOverflow: 'ellipsis',
-    color: fromClient ? theme.project.page.main.listPanel.message.client.textColor : theme.project.page.main.listPanel.message.server.textColor,
-  }),
+    color: theme.project.page.main.listPanel.message.server.textColor,
+  },
 }))
 
 export function Message({message, selectedMessageID, onSelectedMessageChange}) {
   const {t} = useTranslation('ListPanel')
-  const fromClient = message.source === MessageSource.Client
-  const classes = useStyles({fromClient})
+  const classes = useStyles()
   const selected = message.id === selectedMessageID
 
   const onSelected = () => {
@@ -35,7 +36,10 @@ export function Message({message, selectedMessageID, onSelectedMessageChange}) {
   const MessageTitle = ({message}) => {
     const time = new Date(message.time).toLocaleString()
     return (
-      <span className={classes.messageTitle}>{time}</span>
+      <>
+        <span className={classes.messageSubject}>{message.subject}</span>
+        <span className={classes.messageTime}> [{time}]</span>
+      </>
     )
   }
 
@@ -52,8 +56,8 @@ export function Message({message, selectedMessageID, onSelectedMessageChange}) {
 Message.propTypes = {
   message: PropTypes.shape({
     id: PropTypes.string.isRequired,
+    subject: PropTypes.string.isRequired,
     time: PropTypes.string.isRequired,
-    source: PropTypes.string.isRequired,
     body: PropTypes.string.isRequired,
   }).isRequired,
   selectedMessageID: PropTypes.string,

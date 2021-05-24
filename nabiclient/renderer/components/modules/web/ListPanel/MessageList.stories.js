@@ -19,37 +19,31 @@ Default.args = {
     {
       id: generateRandomString(),
       time: new Date(),
-      source: MessageSource.Client,
       body: '內文 1'
     },
     {
       id: generateRandomString(),
       time: new Date(),
-      source: MessageSource.Server,
       body: '內文 2'
     },
     {
       id: generateRandomString(),
       time: new Date(),
-      source: MessageSource.Client,
       body: '內文 3'
     },
     {
       id: generateRandomString(),
       time: new Date(),
-      source: MessageSource.Client,
       body: '內文 4'
     },
     {
       id: generateRandomString(),
       time: new Date(),
-      source: MessageSource.Server,
       body: '內文 5'
     },
     {
       id: generateRandomString(),
       time: new Date(),
-      source: MessageSource.Client,
       body: '內文 6'
     },
   ],

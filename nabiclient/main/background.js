@@ -53,10 +53,10 @@ ipcMain.on('disconnect', async (event) => {
   natsClient = null
 })
 
-ipcMain.on('publish', (event, channel, message) => {
+ipcMain.on('publish', (event, channel, messageBody) => {
   const sc = StringCodec()
-  natsClient.publish(channel, sc.encode(message))
-  console.log('main publish', channel, message)
+  natsClient.publish(channel, sc.encode(messageBody))
+  console.log('main publish', channel, messageBody)
 })
 
 ipcMain.on('subscribe', async (event, channel) => {
@@ -64,12 +64,12 @@ ipcMain.on('subscribe', async (event, channel) => {
   subscription = natsClient.subscribe(channel)
   console.log('main subscribe', channel)
   for await (const m of subscription) {
-    event.reply('new-message', sc.decode(m.data))
-    console.log('main new message', channel, sc.decode(m.data), m.subject)
+    event.reply('new-message', m.subject, sc.decode(m.data))
+    console.log('main new message', channel, m.subject, sc.decode(m.data))
   }
 })
 
-ipcMain.on('unsubscribe', async (event ) => {
+ipcMain.on('unsubscribe', async (event) => {
   subscription.unsubscribe()
   subscription = null
   console.log('main unsubscribe')
