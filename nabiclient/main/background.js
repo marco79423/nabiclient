@@ -1,7 +1,8 @@
 import {app, ipcMain} from 'electron'
 import serve from 'electron-serve'
-import {createWindow} from './helpers'
 import {connect, StringCodec} from 'nats'
+
+import {createWindow} from './helpers'
 
 const isProd = process.env.NODE_ENV === 'production'
 

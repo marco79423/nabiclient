@@ -1,19 +1,52 @@
-import React, {useState} from 'react'
+import React from 'react'
 import {makeStyles} from '@material-ui/core/styles'
-import {AppBar as MuiAppBar, Backdrop, Grid} from '@material-ui/core'
-import CircularProgress from '@material-ui/core/CircularProgress'
+import {
+  AppBar as MuiAppBar,
+  Backdrop,
+  CircularProgress,
+  Divider,
+  Drawer,
+  Grid,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText
+} from '@material-ui/core'
+import SettingsIcon from '@material-ui/icons/Settings'
+import StarIcon from '@material-ui/icons/Star'
 
 import Logo from '../modules/web/AppBar/Logo'
-import {AppWebDisplayMode} from '../../constants'
+import {useRouter} from 'next/router'
 
+
+const drawerWidth = 240
 
 const useStyles = makeStyles((theme) => ({
   root: {},
   appBar: {
+    zIndex: theme.zIndex.drawer + 1,
     background: theme.project.page.header.background,
     height: 64,
   },
+  content: {
+    display: 'flex',
+  },
+  drawer: {
+    width: drawerWidth,
+    flexShrink: 0,
+  },
+  drawerPaper: {
+    top: 'initial',
+    width: drawerWidth,
+  },
+  drawerContainer: {
+    overflow: 'auto',
+  },
+  copyright: {
+    margin: '16px auto 0',
+  },
   main: {
+    flexGrow: 1,
     display: 'flex',
     background: theme.project.page.main.background,
     height: 'calc(100vh - 64px)'
@@ -39,7 +72,8 @@ export default function DefaultLayout({
                                         detailPanel: DetailPanel,
                                       }) {
   const classes = useStyles()
-
+  const router = useRouter()
+  console.log('router', router.pathname)
   return (
     <>
       <Backdrop style={{zIndex: 100}} open={loading}>
@@ -56,17 +90,50 @@ export default function DefaultLayout({
           </Grid>
         </Grid>
       </MuiAppBar>
-      <main className={classes.main}>
-        <div className={classes.controlPanel}>
-          {<ControlPanel appController={appController}/>}
-        </div>
-        <div className={classes.listPanel}>
-          {<ListPanel appController={appController}/>}
-        </div>
-        <div className={classes.detailPanel}>
-          {<DetailPanel appController={appController}/>}
-        </div>
-      </main>
+      <div className={classes.content}>
+        <Drawer
+          className={classes.drawer}
+          variant="permanent"
+          classes={{
+            paper: classes.drawerPaper,
+          }}
+        >
+          <div className={classes.drawerContainer}>
+            <List>
+              <ListItem button onClick={() => router.push('/')}>
+                <ListItemIcon>{router.pathname === '/' ? <StarIcon/> : null}</ListItemIcon>
+                <ListItemText primary={'NATS'}/>
+              </ListItem>
+              <ListItem button onClick={() => router.push('/streaming')}>
+                <ListItemIcon>{router.pathname === '/streaming' ? <StarIcon/> : null}</ListItemIcon>
+                <ListItemText primary={'NATS Streaming'}/>
+              </ListItem>
+              <ListItem button onClick={() => router.push('/jet-stream')}>
+                <ListItemIcon>{router.pathname === '/jet-stream' ? <StarIcon/> : null}</ListItemIcon>
+                <ListItemText primary={'JetStream'}/>
+              </ListItem>
+            </List>
+            <Divider/>
+            <List>
+              <ListItem button>
+                <ListItemIcon><SettingsIcon/></ListItemIcon>
+                <ListItemText primary={'設定'}/>
+              </ListItem>
+            </List>
+          </div>
+        </Drawer>
+        <main className={classes.main}>
+          <div className={classes.controlPanel}>
+            {<ControlPanel appController={appController}/>}
+          </div>
+          <div className={classes.listPanel}>
+            {<ListPanel appController={appController}/>}
+          </div>
+          <div className={classes.detailPanel}>
+            {<DetailPanel appController={appController}/>}
+          </div>
+        </main>
+      </div>
     </>
   )
 }

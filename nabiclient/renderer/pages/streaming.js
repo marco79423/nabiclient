@@ -17,7 +17,7 @@ export const getStaticProps = async ({locale}) => ({
   }
 })
 
-export default function IndexPage() {
+export default function StreamingPage() {
   return (
     <AppController>
       <MainWebContainer/>
