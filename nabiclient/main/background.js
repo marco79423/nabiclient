@@ -42,8 +42,8 @@ app.on('window-all-closed', () => {
 
 let natsClient
 
-ipcMain.on('connect', async (event, {url}) => {
-  natsClient = await connectNATS(url)
+ipcMain.on('connect', async (event, connectInfo) => {
+  natsClient = await connectNATS(connectInfo)
 })
 
 ipcMain.on('disconnect', async (event) => {
