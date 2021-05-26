@@ -69,8 +69,8 @@ export default function AppController({children}) {
     dispatch(changeSubscribedStatus(true))
   }
 
-  const unsubscribeChannel = async () => {
-    ipcRenderer.send('unsubscribe')
+  const unsubscribeChannel = async (channel) => {
+    ipcRenderer.send('unsubscribe', channel)
     dispatch(changeSubscribedStatus(false))
   }
 

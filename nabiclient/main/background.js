@@ -1,8 +1,8 @@
 import {app, ipcMain} from 'electron'
 import serve from 'electron-serve'
-import {connect, StringCodec} from 'nats'
 
 import {createWindow} from './helpers'
+import {connectNATS} from './utils/NATSClient'
 
 const isProd = process.env.NODE_ENV === 'production'
 
@@ -41,37 +41,25 @@ app.on('window-all-closed', () => {
 
 
 let natsClient
-let subscription
 
 ipcMain.on('connect', async (event, {url}) => {
-  natsClient = await connect(url)
-
-  console.log('main connect', url)
+  natsClient = await connectNATS(url)
 })
 
 ipcMain.on('disconnect', async (event) => {
-  await natsClient.drain()
-  natsClient = null
+  await natsClient.disconnect()
 })
 
-ipcMain.on('publish', (event, channel, messageBody) => {
-  const sc = StringCodec()
-  natsClient.publish(channel, sc.encode(messageBody))
-  console.log('main publish', channel, messageBody)
+ipcMain.on('publish', async (event, channel, messageBody) => {
+  await natsClient.publish(channel, messageBody)
 })
 
 ipcMain.on('subscribe', async (event, channel) => {
-  const sc = StringCodec()
-  subscription = natsClient.subscribe(channel)
-  console.log('main subscribe', channel)
-  for await (const m of subscription) {
-    event.reply('new-message', m.subject, sc.decode(m.data))
-    console.log('main new message', channel, m.subject, sc.decode(m.data))
-  }
+  await natsClient.subscribe(channel, (subject, messageBody) => {
+    event.reply('new-message', subject, messageBody)
+  })
 })
 
-ipcMain.on('unsubscribe', async (event) => {
-  subscription.unsubscribe()
-  subscription = null
-  console.log('main unsubscribe')
+ipcMain.on('unsubscribe', async (event, channel) => {
+  await natsClient.unsubscribe(channel)
 })

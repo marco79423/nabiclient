@@ -46,6 +46,7 @@ export default function SubscribePanel({
       <div className={classes.controlBar}>
         <TextField
           label={t('頻道')}
+          disabled={isSubscribed}
           value={channel}
           onChange={onChannelChange}
         />

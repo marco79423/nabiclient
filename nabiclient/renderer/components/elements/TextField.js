@@ -7,14 +7,14 @@ const useStyles = makeStyles((theme) => ({
   root: {
     height: '100%',
     '& .MuiInputBase-root': {
-      height: "100%",
-      display: "flex",
-      alignItems: "start"
+      height: '100%',
+      display: 'flex',
+      alignItems: 'start'
     },
   },
 }))
 
-export default function TextField({label, value, onChange}) {
+export default function TextField({label, disabled, value, onChange}) {
   const classes = useStyles()
 
   const onValueChange = (e) => {
@@ -27,6 +27,7 @@ export default function TextField({label, value, onChange}) {
       variant="outlined"
       margin="normal"
       fullWidth
+      disabled={disabled}
       label={label}
       value={value}
       onChange={onValueChange}
@@ -36,6 +37,7 @@ export default function TextField({label, value, onChange}) {
 
 TextField.propTypes = {
   label: PropTypes.string,
+  disabled: PropTypes.bool,
   value: PropTypes.string,
   onChange: PropTypes.func,
 }

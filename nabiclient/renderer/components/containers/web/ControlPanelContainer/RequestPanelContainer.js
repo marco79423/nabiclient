@@ -46,7 +46,7 @@ export default function RequestPanelContainer({appController}) {
   }
 
   const onUnsubscribeChannel = async () => {
-    await appController.unsubscribeChannel()
+    await appController.unsubscribeChannel(localSubscribeChannel)
   }
 
   const onPublishMessage = async () => {
