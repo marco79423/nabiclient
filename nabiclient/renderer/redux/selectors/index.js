@@ -19,6 +19,10 @@ export const getSettingMaxMessageCount = state => state.project.setting.maxMessa
 
 export const getConnectionUrl = state => state.project.connection.url
 
+export const getClusterID = state => state.project.connection.clusterID
+
+export const getClientID = state => state.project.connection.clientID
+
 export const getSubscribeChannel = state => state.project.subscribe.channel
 
 export const getPublishChannel = state => state.project.publish.channel

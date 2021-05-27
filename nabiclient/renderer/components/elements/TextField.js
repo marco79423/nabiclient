@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-export default function TextField({label, disabled, value, onChange}) {
+export default function TextField({className, label, disabled, value, onChange}) {
   const classes = useStyles()
 
   const onValueChange = (e) => {
@@ -23,7 +23,7 @@ export default function TextField({label, disabled, value, onChange}) {
 
   return (
     <MuiTextField
-      className={classes.root}
+      className={`${classes.root} ${className}`}
       variant="outlined"
       margin="normal"
       fullWidth
@@ -36,6 +36,7 @@ export default function TextField({label, disabled, value, onChange}) {
 }
 
 TextField.propTypes = {
+  className: PropTypes.string,
   label: PropTypes.string,
   disabled: PropTypes.bool,
   value: PropTypes.string,

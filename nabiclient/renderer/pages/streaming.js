@@ -1,9 +1,9 @@
 import React from 'react'
 import {serverSideTranslations} from 'next-i18next/serverSideTranslations'
 
-import AppController from '../components/controllers/AppController'
-import MainWebContainer from '../components/containers/web/MainWebContainer'
 import nextI18nConfig from '../next-i18next.config'
+import AppController from '../components/controllers/AppController'
+import MainContainer from '../components/containers/streaming/MainContainer'
 
 export const getStaticProps = async ({locale}) => ({
   props: {
@@ -12,7 +12,7 @@ export const getStaticProps = async ({locale}) => ({
       'Toolbar',
       'ControlPanel',
       'ListPanel',
-      'DetailPanel',
+      'DetailPanelContainer',
     ], nextI18nConfig),
   }
 })
@@ -20,7 +20,7 @@ export const getStaticProps = async ({locale}) => ({
 export default function StreamingPage() {
   return (
     <AppController>
-      <MainWebContainer/>
+      <MainContainer/>
     </AppController>
   )
 }

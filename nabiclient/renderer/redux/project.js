@@ -8,6 +8,10 @@ export const changeSettingMaxMessageCount = createAction('project/setting/change
 
 export const changeConnectionUrl = createAction('project/connection/changeConnectionUrl')
 
+export const changeClusterID = createAction('project/connection/changeClusterID')
+
+export const changeClientID = createAction('project/connection/changeClientID')
+
 export const changeSubscribeChannel = createAction('project/subscribe/changeSubscribeChannel')
 
 export const changePublishChannel = createAction('project/publish/changePublishChannel')
@@ -33,6 +37,8 @@ const projectSlice = createSlice({
     // 連線資訊
     connection: {
       url: 'localhost:4222',
+      clusterID: '',
+      clientID: '',
     },
 
     subscribe: {
@@ -56,6 +62,12 @@ const projectSlice = createSlice({
     },
     [changeConnectionUrl]: (state, action) => {
       state.connection.url = action.payload
+    },
+    [changeClusterID]: (state, action) => {
+      state.connection.clusterID = action.payload
+    },
+    [changeClientID]: (state, action) => {
+      state.connection.clientID = action.payload
     },
     [changeSubscribeChannel]: (state, action) => {
       state.subscribe.channel = action.payload

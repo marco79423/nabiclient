@@ -2,7 +2,7 @@ import React from 'react'
 import {serverSideTranslations} from 'next-i18next/serverSideTranslations'
 
 import AppController from '../components/controllers/AppController'
-import MainWebContainer from '../components/containers/web/MainWebContainer'
+import MainContainer from '../components/containers/nats/MainContainer'
 import nextI18nConfig from '../next-i18next.config'
 
 export const getStaticProps = async ({locale}) => ({
@@ -12,7 +12,7 @@ export const getStaticProps = async ({locale}) => ({
       'Toolbar',
       'ControlPanel',
       'ListPanel',
-      'DetailPanel',
+      'DetailPanelContainer',
     ], nextI18nConfig),
   }
 })
@@ -20,7 +20,7 @@ export const getStaticProps = async ({locale}) => ({
 export default function IndexPage() {
   return (
     <AppController>
-      <MainWebContainer/>
+      <MainContainer/>
     </AppController>
   )
 }

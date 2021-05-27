@@ -15,7 +15,7 @@ import {
 import SettingsIcon from '@material-ui/icons/Settings'
 import StarIcon from '@material-ui/icons/Star'
 
-import Logo from '../modules/web/AppBar/Logo'
+import Logo from '../modules/common/AppBar/Logo'
 import {useRouter} from 'next/router'
 
 
@@ -107,10 +107,6 @@ export default function DefaultLayout({
               <ListItem button onClick={() => router.push('/streaming')}>
                 <ListItemIcon>{router.pathname === '/streaming' ? <StarIcon/> : null}</ListItemIcon>
                 <ListItemText primary={'NATS Streaming'}/>
-              </ListItem>
-              <ListItem button onClick={() => router.push('/jet-stream')}>
-                <ListItemIcon>{router.pathname === '/jet-stream' ? <StarIcon/> : null}</ListItemIcon>
-                <ListItemText primary={'JetStream'}/>
               </ListItem>
             </List>
             <Divider/>
