@@ -16,7 +16,7 @@ import SettingsIcon from '@material-ui/icons/Settings'
 import StarIcon from '@material-ui/icons/Star'
 
 import Logo from '../modules/common/AppBar/Logo'
-import {useRouter} from 'next/router'
+import {AppMode} from '../../constants'
 
 
 const drawerWidth = 240
@@ -72,8 +72,6 @@ export default function DefaultLayout({
                                         detailPanel: DetailPanel,
                                       }) {
   const classes = useStyles()
-  const router = useRouter()
-  console.log('router', router.pathname)
   return (
     <>
       <Backdrop style={{zIndex: 100}} open={loading}>
@@ -100,12 +98,12 @@ export default function DefaultLayout({
         >
           <div className={classes.drawerContainer}>
             <List>
-              <ListItem button onClick={() => router.push('/')}>
-                <ListItemIcon>{router.pathname === '/' ? <StarIcon/> : null}</ListItemIcon>
+              <ListItem button onClick={() => appController.changeAppMode(AppMode.NATS)}>
+                <ListItemIcon>{appController.getAppMode() === AppMode.NATS ? <StarIcon/> : null}</ListItemIcon>
                 <ListItemText primary={'NATS'}/>
               </ListItem>
-              <ListItem button onClick={() => router.push('/streaming')}>
-                <ListItemIcon>{router.pathname === '/streaming' ? <StarIcon/> : null}</ListItemIcon>
+              <ListItem button onClick={() => appController.changeAppMode(AppMode.Streaming)}>
+                <ListItemIcon>{appController.getAppMode() === AppMode.Streaming ? <StarIcon/> : null}</ListItemIcon>
                 <ListItemText primary={'NATS Streaming'}/>
               </ListItem>
             </List>

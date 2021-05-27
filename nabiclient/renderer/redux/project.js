@@ -37,8 +37,8 @@ const projectSlice = createSlice({
     // 連線資訊
     connection: {
       url: 'localhost:4222',
-      clusterID: '',
-      clientID: '',
+      clusterID: 'test-cluster',
+      clientID: 'test',
     },
 
     subscribe: {

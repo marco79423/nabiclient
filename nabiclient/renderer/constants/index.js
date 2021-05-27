@@ -1,3 +1,8 @@
+export const AppMode = Object.freeze({
+  NATS: 'NATS',
+  Streaming: 'Streaming'
+})
+
 export const LoadingState = Object.freeze({
   Idle: 'idle',
   Loading: 'loading',

@@ -7,7 +7,7 @@ class NATSStreamingClient {
     this.subscriptions = new Map()
   }
 
-  connect = async (clusterID, clientID, {url}) => {
+  connect = async ({clusterID, clientID, url}) => {
     this.client = connect(clusterID, clientID, {
       url: 'nats://localhost:4222'
     })
@@ -49,8 +49,8 @@ class NATSStreamingClient {
   }
 }
 
-export async function connectNATSStreaming(clusterID, clientID, connectInfo) {
+export async function connectNATSStreaming(connectInfo) {
   const natsClient = new NATSStreamingClient()
-  await natsClient.connect(clusterID, clientID, connectInfo)
+  await natsClient.connect(connectInfo)
   return natsClient
 }

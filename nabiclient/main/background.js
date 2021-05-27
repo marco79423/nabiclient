@@ -3,6 +3,7 @@ import serve from 'electron-serve'
 
 import {createWindow} from './helpers'
 import {connectNATS} from './utils/NATSClient'
+import {connectNATSStreaming} from './utils/NATSStreamingClient'
 
 const isProd = process.env.NODE_ENV === 'production'
 
@@ -40,26 +41,54 @@ app.on('window-all-closed', () => {
 })
 
 
+// NATS
+
 let natsClient
 
-ipcMain.on('connect', async (event, connectInfo) => {
+ipcMain.on('nats.connect', async (event, connectInfo) => {
   natsClient = await connectNATS(connectInfo)
 })
 
-ipcMain.on('disconnect', async (event) => {
+ipcMain.on('nats.disconnect', async (event) => {
   await natsClient.disconnect()
 })
 
-ipcMain.on('publish', async (event, channel, messageBody) => {
+ipcMain.on('nats.publish', async (event, channel, messageBody) => {
   await natsClient.publish(channel, messageBody)
 })
 
-ipcMain.on('subscribe', async (event, channel) => {
+ipcMain.on('nats.subscribe', async (event, channel) => {
   await natsClient.subscribe(channel, (subject, messageBody) => {
-    event.reply('new-message', subject, messageBody)
+    event.reply('nats.new-message', subject, messageBody)
   })
 })
 
-ipcMain.on('unsubscribe', async (event, channel) => {
+ipcMain.on('nats.unsubscribe', async (event, channel) => {
   await natsClient.unsubscribe(channel)
+})
+
+// NATS Streaming
+
+let natsStreamingClient
+
+ipcMain.on('nats-streaming.connect', async (event, connectInfo) => {
+  natsStreamingClient = await connectNATSStreaming(connectInfo)
+})
+
+ipcMain.on('nats-streaming.disconnect', async (event) => {
+  await natsStreamingClient.disconnect()
+})
+
+ipcMain.on('nats-streaming.publish', async (event, channel, messageBody) => {
+  await natsStreamingClient.publish(channel, messageBody)
+})
+
+ipcMain.on('nats-streaming.subscribe', async (event, channel) => {
+  await natsStreamingClient.subscribe(channel, (subject, messageBody) => {
+    event.reply('nats-streaming.new-message', subject, messageBody)
+  })
+})
+
+ipcMain.on('nats-streaming.unsubscribe', async (event, channel) => {
+  await natsStreamingClient.unsubscribe(channel)
 })

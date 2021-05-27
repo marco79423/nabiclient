@@ -41,12 +41,12 @@ export default function RequestPanelContainer({appController}) {
     dispatch(changePublishMessageBody(value))
   }
 
-  const onSubscribeChannel = () => {
-    appController.subscribeChannel(localSubscribeChannel)
+  const onSubscribeChannel = async () => {
+    await appController.subscribeNATSChannel(localSubscribeChannel)
   }
 
   const onUnsubscribeChannel = async () => {
-    await appController.unsubscribeChannel(localSubscribeChannel)
+    await appController.unsubscribeNATSChannel(localSubscribeChannel)
   }
 
   const onPublishMessage = async () => {
@@ -54,7 +54,7 @@ export default function RequestPanelContainer({appController}) {
     dispatch(changePublishMessageBody(localPublishMessageBody))
 
     try {
-      await appController.publishMessage(localPublishChannel, localPublishMessageBody)
+      await appController.publishNATSMessage(localPublishChannel, localPublishMessageBody)
     } catch (e) {
       console.log(e)
       appController.throwError(t('請求傳送失敗'))

@@ -4,25 +4,67 @@ import {GA4React} from 'ga-4-react'
 import useAsyncEffect from 'use-async-effect'
 import {useTranslation} from 'next-i18next'
 import {ipcRenderer} from 'electron'
-
-import {getMessageCount, getSettingMaxMessageCount} from '../../redux/selectors'
-import {changeConnectionState, changeProjectState, changeSubscribedStatus} from '../../redux/current'
-import {ConnectionState, LoadingState, MessageSource} from '../../constants'
+import {changeConnectionState, changeProjectState, changeSubscribedStatus, initialize} from '../../redux/current'
+import {AppMode, ConnectionState, LoadingState} from '../../constants'
 import {appendMessage, setProjectData} from '../../redux/project'
 import generateRandomString from '../../utils/generateRandomString'
 import {loadProjectDataFromLocalStorage,} from '../../features/project'
 import Alert from '../elements/Alert'
+import {useRouter} from 'next/router'
+import {getConnectionState} from '../../redux/selectors'
 
 
 export default function AppController({children}) {
   const dispatch = useDispatch()
+  const connectState = useSelector(getConnectionState)
   const {t} = useTranslation('common')
-
-  const maxMessageCount = useSelector(getSettingMaxMessageCount)
-  const messageCount = useSelector(getMessageCount)
+  const router = useRouter()
   const track = useTrackFunc()
-
+  const [appMode, setAppMode] = useState(AppMode.NATS)
   const [alert, setAlert] = useState({})
+
+  useEffect(() => {
+    switch (router.pathname) {
+      case '/':
+        setAppMode(AppMode.NATS)
+        break
+      case '/streaming':
+        setAppMode(AppMode.Streaming)
+        break
+    }
+  }, [router.pathname])
+
+  const getAppMode = () => {
+    return appMode
+  }
+
+  const reset = async () => {
+    if (connectState === ConnectionState.Connected) {
+      switch (appMode) {
+        case AppMode.NATS:
+          await disconnectNATS()
+          break
+        case AppMode.Streaming:
+          await disconnectNATSStreaming()
+          break
+      }
+    }
+
+    await initialize()
+  }
+
+  const changeAppMode = async (appMode) => {
+    await reset()
+
+    switch (appMode) {
+      case AppMode.NATS:
+        await router.push('/')
+        break
+      case AppMode.Streaming:
+        await router.push('/streaming')
+        break
+    }
+  }
 
   const showErrorAlert = (message) => {
     setAlert({
@@ -46,31 +88,59 @@ export default function AppController({children}) {
     })
   }
 
-  const connect = (url) => {
-    ipcRenderer.send('connect', {url})
-    console.log('renderer connect', url)
+  // NATS
+
+  const connectNATS = (connectInfo) => {
+    ipcRenderer.send('nats.connect', connectInfo)
+    console.log('renderer nats.connect', connectInfo)
     dispatch(changeConnectionState(ConnectionState.Connected))
   }
 
-  const disconnect = () => {
-    ipcRenderer.send('disconnect')
+  const disconnectNATS = () => {
+    ipcRenderer.send('nats.disconnect')
     dispatch(changeConnectionState(ConnectionState.Idle))
   }
 
-  const publishMessage = async (channel, messageBody) => {
-    ipcRenderer.send('publish', channel, messageBody)
-
-    track('send_message')
+  const publishNATSMessage = async (channel, messageBody) => {
+    ipcRenderer.send('nats.publish', channel, messageBody)
     showSuccessAlert(t('訊息已發布'))
   }
 
-  const subscribeChannel = async (channel) => {
-    ipcRenderer.send('subscribe', channel)
+  const subscribeNATSChannel = async (channel) => {
+    ipcRenderer.send('nats.subscribe', channel)
     dispatch(changeSubscribedStatus(true))
   }
 
-  const unsubscribeChannel = async (channel) => {
-    ipcRenderer.send('unsubscribe', channel)
+  const unsubscribeNATSChannel = async (channel) => {
+    ipcRenderer.send('nats.unsubscribe', channel)
+    dispatch(changeSubscribedStatus(false))
+  }
+
+  // NATS Streaming
+
+  const connectNATSStreaming = (connectInfo) => {
+    ipcRenderer.send('nats-streaming.connect', connectInfo)
+    console.log('renderer nats-streaming.connect', connectInfo)
+    dispatch(changeConnectionState(ConnectionState.Connected))
+  }
+
+  const disconnectNATSStreaming = () => {
+    ipcRenderer.send('nats-streaming.disconnect')
+    dispatch(changeConnectionState(ConnectionState.Idle))
+  }
+
+  const publishNATSStreamingMessage = async (channel, messageBody) => {
+    ipcRenderer.send('nats-streaming.publish', channel, messageBody)
+    showSuccessAlert(t('訊息已發布'))
+  }
+
+  const subscribeNATSStreamingChannel = async (channel) => {
+    ipcRenderer.send('nats-streaming.subscribe', channel)
+    dispatch(changeSubscribedStatus(true))
+  }
+
+  const unsubscribeNATSStreamingChannel = async (channel) => {
+    ipcRenderer.send('nats-streaming.unsubscribe', channel)
     dispatch(changeSubscribedStatus(false))
   }
 
@@ -81,7 +151,16 @@ export default function AppController({children}) {
   useAsyncEffect(async () => {
     await dispatch(changeProjectState(LoadingState.Loading))
 
-    ipcRenderer.on('new-message', async (event, subject, messageBody) => {
+    ipcRenderer.on('nats.new-message', async (event, subject, messageBody) => {
+      await dispatch(appendMessage({
+        id: generateRandomString(),
+        time: new Date().toISOString(),
+        subject: subject,
+        body: messageBody,
+      }))
+    })
+
+    ipcRenderer.on('nats-streaming.new-message', async (event, subject, messageBody) => {
       await dispatch(appendMessage({
         id: generateRandomString(),
         time: new Date().toISOString(),
@@ -100,14 +179,24 @@ export default function AppController({children}) {
 
 
   const appController = {
+    getAppMode,
+    changeAppMode,
+
     track,
 
-    connect,
-    disconnect,
+    connectNATS,
+    disconnectNATS,
 
-    publishMessage,
-    subscribeChannel,
-    unsubscribeChannel,
+    publishNATSMessage,
+    subscribeNATSChannel,
+    unsubscribeNATSChannel,
+
+    connectNATSStreaming,
+    disconnectNATSStreaming,
+
+    publishNATSStreamingMessage,
+    subscribeNATSStreamingChannel,
+    unsubscribeNATSStreamingChannel,
 
     throwError,
   }

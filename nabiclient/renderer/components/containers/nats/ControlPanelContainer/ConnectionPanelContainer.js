@@ -14,11 +14,11 @@ export default function ConnectionPanelContainer({appController}) {
 
   const connect = async (url) => {
     await dispatch(changeConnectionUrl(url))
-    await appController.connect(url)
+    await appController.connectNATS({url})
   }
 
   const disconnect = async () => {
-    await appController.disconnect()
+    await appController.disconnectNATSStreaming()
   }
 
   return (

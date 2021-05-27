@@ -73,14 +73,22 @@ export default function ConnectionPanel({state, url, clusterID, clientID, connec
     }
   }, [state])
 
-  const onChange = (value) => {
+  const onUrlChange = (value) => {
     setLocalUrl(value)
+  }
+
+  const onClusterIDChange = (value) => {
+    setLocalClusterID(value)
+  }
+
+  const onClientIDChange = (value) => {
+    setLocalClientID(value)
   }
 
   const onButtonClicked = async () => {
     switch (state) {
       case ConnectionState.Idle:
-        await connect(localUrl)
+        await connect({url, clusterID, clientID})
         return
       case ConnectionState.Connected:
         await disconnect()
@@ -96,7 +104,7 @@ export default function ConnectionPanel({state, url, clusterID, clientID, connec
         className={classes.input}
         placeholder={t('欲連線的網址')}
         value={localUrl}
-        onChange={onChange}
+        onChange={onUrlChange}
         disabled={state !== ConnectionState.Idle}
         error={!isValidUrl}
       />
@@ -105,7 +113,7 @@ export default function ConnectionPanel({state, url, clusterID, clientID, connec
         label={t('ClusterID')}
         placeholder={t('ClusterID')}
         value={localClusterID}
-        onChange={onChange}
+        onChange={onClusterIDChange}
         disabled={state !== ConnectionState.Idle}
       />
       <TextField
@@ -113,7 +121,7 @@ export default function ConnectionPanel({state, url, clusterID, clientID, connec
         label={t('ClientID')}
         placeholder={t('ClientID')}
         value={localClientID}
-        onChange={onChange}
+        onChange={onClientIDChange}
         disabled={state !== ConnectionState.Idle}
       />
       <Grid className={classes.bottomActions} container justify="space-between">
