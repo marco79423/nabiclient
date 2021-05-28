@@ -12,9 +12,6 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
-
-    // height: '100%',
-    // maxHeight: 400,
     padding: theme.spacing(3),
 
     borderTopLeftRadius: 0,
@@ -88,7 +85,11 @@ export default function ConnectionPanel({state, url, clusterID, clientID, connec
   const onButtonClicked = async () => {
     switch (state) {
       case ConnectionState.Idle:
-        await connect({url, clusterID, clientID})
+        await connect({
+          url: localUrl,
+          clusterID: localClusterID,
+          clientID: localClientID,
+        })
         return
       case ConnectionState.Connected:
         await disconnect()
@@ -102,6 +103,7 @@ export default function ConnectionPanel({state, url, clusterID, clientID, connec
     <Paper className={classes.root}>
       <TextField
         className={classes.input}
+        label={t('欲連線的網址')}
         placeholder={t('欲連線的網址')}
         value={localUrl}
         onChange={onUrlChange}

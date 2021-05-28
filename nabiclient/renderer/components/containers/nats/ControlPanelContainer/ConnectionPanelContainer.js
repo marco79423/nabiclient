@@ -12,7 +12,7 @@ export default function ConnectionPanelContainer({appController}) {
   const connectionState = useSelector(getConnectionState)
   const connectionUrl = useSelector(getConnectionUrl)
 
-  const connect = async (url) => {
+  const connect = async ({url}) => {
     await dispatch(changeConnectionUrl(url))
     await appController.connectNATS({url})
   }

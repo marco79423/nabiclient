@@ -4,19 +4,36 @@ import {useTranslation} from 'next-i18next'
 import {makeStyles} from '@material-ui/core/styles'
 
 import {ConnectionState} from '../../../../constants'
-import LinkButton from '../../../elements/LinkButton'
-import TextFieldWithAction from '../../../elements/TextFieldWithAction'
+import {Grid, Paper} from '@material-ui/core'
+import TextField from '../../../elements/TextField'
+import Button from '../../../elements/Button'
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    margin: '0 auto',
+    display: 'flex',
+    flexDirection: 'column',
+    padding: theme.spacing(3),
+
+    borderTopLeftRadius: 0,
   },
+  input: {
+    fontSize: '1rem',
+    height: 'auto',
+  },
+  requestBody: {
+    flex: 1,
+    marginTop: theme.spacing(1),
+    maxHeight: 400,
+  },
+  bottomActions: {
+    marginTop: theme.spacing(4),
+  }
 }))
 
 export default function ConnectionPanel({state, url, connect, disconnect}) {
   const classes = useStyles()
   const {t} = useTranslation('ControlPanel')
-  const [localUrl, setLocalUrl] = useState('')
+  const [localUrl, setLocalUrl] = useState(url)
   const [buttonLabel, setButtonLabel] = useState('')
 
   useEffect(() => {
@@ -40,14 +57,16 @@ export default function ConnectionPanel({state, url, connect, disconnect}) {
     }
   }, [state])
 
-  const onChange = (value) => {
+  const onUrlChange = (value) => {
     setLocalUrl(value)
   }
 
   const onButtonClicked = async () => {
     switch (state) {
       case ConnectionState.Idle:
-        await connect(localUrl)
+        await connect({
+          url: localUrl,
+        })
         return
       case ConnectionState.Connected:
         await disconnect()
@@ -58,23 +77,29 @@ export default function ConnectionPanel({state, url, connect, disconnect}) {
   const isValidUrl = true // 暫時不檢查 url
 
   return (
-    <TextFieldWithAction
-      className={classes.root}
-      large
-      placeholder={t('欲連線的網址')}
-      value={localUrl}
-      onChange={onChange}
-      disabled={state !== ConnectionState.Idle}
-      error={!isValidUrl}
-      action={
-        <LinkButton
-          primary
-          large
-          disabled={(state === ConnectionState.Connecting || state === ConnectionState.Closing) || !isValidUrl}
-          onClick={onButtonClicked}
-        >{buttonLabel}</LinkButton>
-      }
-    />
+    <Paper className={classes.root}>
+      <TextField
+        className={classes.input}
+        label={t('欲連線的網址')}
+        placeholder={t('欲連線的網址')}
+        value={localUrl}
+        onChange={onUrlChange}
+        disabled={state !== ConnectionState.Idle}
+        error={!isValidUrl}
+      />
+      <Grid className={classes.bottomActions} container justify="space-between">
+        <Grid item>
+        </Grid>
+        <Grid item>
+          <Button
+            primary
+            large
+            disabled={(state === ConnectionState.Connecting || state === ConnectionState.Closing) || !isValidUrl}
+            onClick={onButtonClicked}
+          >{buttonLabel}</Button>
+        </Grid>
+      </Grid>
+    </Paper>
   )
 }
 
