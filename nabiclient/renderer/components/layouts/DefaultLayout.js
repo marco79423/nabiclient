@@ -64,12 +64,13 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function DefaultLayout({
-                                        appController,
+                                        appMode,
+                                        changeAppMode,
                                         loading,
-                                        toolbar: Toolbar,
-                                        controlPanel: ControlPanel,
-                                        listPanel: ListPanel,
-                                        detailPanel: DetailPanel,
+                                        toolbar,
+                                        controlPanel,
+                                        listPanel,
+                                        detailPanel,
                                       }) {
   const classes = useStyles()
   return (
@@ -84,7 +85,7 @@ export default function DefaultLayout({
             <Logo/>
           </Grid>
           <Grid item>
-            {<Toolbar appController={appController}/>}
+            {toolbar}
           </Grid>
         </Grid>
       </MuiAppBar>
@@ -98,12 +99,12 @@ export default function DefaultLayout({
         >
           <div className={classes.drawerContainer}>
             <List>
-              <ListItem button onClick={() => appController.changeAppMode(AppMode.NATS)}>
-                <ListItemIcon>{appController.getAppMode() === AppMode.NATS ? <StarIcon/> : null}</ListItemIcon>
+              <ListItem button onClick={() => changeAppMode(AppMode.NATS)}>
+                <ListItemIcon>{appMode === AppMode.NATS ? <StarIcon/> : null}</ListItemIcon>
                 <ListItemText primary={'NATS'}/>
               </ListItem>
-              <ListItem button onClick={() => appController.changeAppMode(AppMode.Streaming)}>
-                <ListItemIcon>{appController.getAppMode() === AppMode.Streaming ? <StarIcon/> : null}</ListItemIcon>
+              <ListItem button onClick={() => changeAppMode(AppMode.Streaming)}>
+                <ListItemIcon>{appMode === AppMode.Streaming ? <StarIcon/> : null}</ListItemIcon>
                 <ListItemText primary={'NATS Streaming'}/>
               </ListItem>
             </List>
@@ -118,13 +119,13 @@ export default function DefaultLayout({
         </Drawer>
         <main className={classes.main}>
           <div className={classes.controlPanel}>
-            {<ControlPanel appController={appController}/>}
+            {controlPanel}
           </div>
           <div className={classes.listPanel}>
-            {<ListPanel appController={appController}/>}
+            {listPanel}
           </div>
           <div className={classes.detailPanel}>
-            {<DetailPanel appController={appController}/>}
+            {detailPanel}
           </div>
         </main>
       </div>

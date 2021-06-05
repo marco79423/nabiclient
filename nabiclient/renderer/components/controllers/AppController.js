@@ -6,9 +6,8 @@ import {useTranslation} from 'next-i18next'
 import {ipcRenderer} from 'electron'
 import {changeConnectionState, changeProjectState, changeSubscribedStatus, initialize} from '../../redux/current'
 import {AppMode, ConnectionState, LoadingState} from '../../constants'
-import {appendMessage, setProjectData} from '../../redux/project'
+import {appendMessage} from '../../redux/project'
 import generateRandomString from '../../utils/generateRandomString'
-import {loadProjectDataFromLocalStorage,} from '../../features/project'
 import Alert from '../elements/Alert'
 import {useRouter} from 'next/router'
 import {getConnectionState} from '../../redux/selectors'
@@ -169,11 +168,6 @@ export default function AppController({children}) {
       }))
     })
 
-    const projectData = await loadProjectData()
-    if (projectData) {
-      await dispatch(setProjectData(projectData))
-    }
-
     await dispatch(changeProjectState(LoadingState.Loaded))
   }, [])
 
@@ -236,13 +230,5 @@ function useTrackFunc() {
     if (gaObj) {
       gaObj.gtag('event', key, data)
     }
-  }
-}
-
-async function loadProjectData() {
-  try {
-    return await loadProjectDataFromLocalStorage()
-  } catch {
-    return null
   }
 }

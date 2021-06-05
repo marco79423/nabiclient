@@ -14,12 +14,13 @@ export default function MainContainer({appController}) {
 
   return (
     <DefaultLayout
-      appController={appController}
+      appMode={appController.getAppMode()}
+      changeAppMode={appController.changeAppMode}
       loading={projectState === LoadingState.Loading}
-      toolbar={ToolbarContainer}
-      controlPanel={ControlPanelContainer}
-      listPanel={ListPanelContainer}
-      detailPanel={DetailPanelContainer}
+      toolbar={<ToolbarContainer appController={appController}/>}
+      controlPanel={<ControlPanelContainer appController={appController}/>}
+      listPanel={<ListPanelContainer appController={appController}/>}
+      detailPanel={<DetailPanelContainer appController={appController}/>}
     />
   )
 }
