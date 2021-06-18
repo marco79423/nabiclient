@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ConnectionPanel({state, url, clusterID, clientID, connect, disconnect}) {
   const classes = useStyles()
-  const {t} = useTranslation('ControlPanel')
+  const {t} = useTranslation()
   const [localUrl, setLocalUrl] = useState(url)
   const [localClusterID, setLocalClusterID] = useState(clusterID)
   const [localClientID, setLocalClientID] = useState(clientID)
@@ -103,8 +103,8 @@ export default function ConnectionPanel({state, url, clusterID, clientID, connec
     <Paper className={classes.root}>
       <TextField
         className={classes.input}
-        label={t('欲連線的網址')}
-        placeholder={t('欲連線的網址')}
+        label={t('欲連線的地址')}
+        placeholder={t('欲連線的地址')}
         value={localUrl}
         onChange={onUrlChange}
         disabled={state !== ConnectionState.Idle}

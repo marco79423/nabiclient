@@ -53,7 +53,7 @@ export default function RequestPanel({
                                        onPublishMessage,
                                      }) {
   const classes = useStyles()
-  const {t} = useTranslation('ControlPanel')
+  const {t} = useTranslation()
   const [tabValue, setTabValue] = useState(PanelTab.Subscribe)
 
   const handleTabChange = (event, newValue) => {

@@ -39,7 +39,7 @@ export default function SubscribePanel({
                                          onUnsubscribeChannel,
                                        }) {
   const classes = useStyles()
-  const {t} = useTranslation('ControlPanel')
+  const {t} = useTranslation()
 
   return (
     <Paper className={classes.root}>

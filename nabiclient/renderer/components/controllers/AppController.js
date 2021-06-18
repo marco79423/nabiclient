@@ -16,7 +16,7 @@ import {getConnectionState} from '../../redux/selectors'
 export default function AppController({children}) {
   const dispatch = useDispatch()
   const connectState = useSelector(getConnectionState)
-  const {t} = useTranslation('common')
+  const {t} = useTranslation()
   const router = useRouter()
   const track = useTrackFunc()
   const [appMode, setAppMode] = useState(AppMode.NATS)

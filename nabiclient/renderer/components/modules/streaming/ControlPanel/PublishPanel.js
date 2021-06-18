@@ -40,7 +40,7 @@ export default function PublishPanel({
                                        onPublishMessage
                                      }) {
   const classes = useStyles()
-  const {t} = useTranslation('ControlPanel')
+  const {t} = useTranslation()
 
   return (
     <Paper className={classes.root}>
