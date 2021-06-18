@@ -1,14 +1,9 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import {useTranslation} from 'next-i18next'
 import {useRouter} from 'next/router'
 import {makeStyles} from '@material-ui/core/styles'
 import {Grid, Toolbar as MuiToolbar} from '@material-ui/core'
-import ArchiveIcon from '@material-ui/icons/Archive'
-import UnarchiveIcon from '@material-ui/icons/Unarchive'
-import ShareIcon from '@material-ui/icons/Share'
 
-import IconButton from '../../../elements/IconButton'
 import useMobileMode from '../../../hooks/useMobileMode'
 import Select from '../../../elements/Select'
 
@@ -19,10 +14,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-export default function Toolbar({onShareButtonClick, onExportButtonClick, onImportButtonClick}) {
+export default function Toolbar() {
   const classes = useStyles()
-  const {t, i18n} = useTranslation()
-  const mobileMode = useMobileMode()
+  const {i18n} = useTranslation()
   const router = useRouter()
 
   const locales = [
@@ -48,21 +42,20 @@ export default function Toolbar({onShareButtonClick, onExportButtonClick, onImpo
     <Grid container justify="space-between" alignItems="center">
       <Grid item>
         <MuiToolbar>
-          <Select
-            className={classes.select}
-            currentValue={i18n.language}
-            selections={locales.map(locale => ({
-              key: locale.language,
-              label: locale.label,
-              value: locale.language,
-            }))}
-            onSelectionChange={onLocaleChange}
-          />
+          {/*<Select*/}
+          {/*  className={classes.select}*/}
+          {/*  currentValue={i18n.language}*/}
+          {/*  selections={locales.map(locale => ({*/}
+          {/*    key: locale.language,*/}
+          {/*    label: locale.label,*/}
+          {/*    value: locale.language,*/}
+          {/*  }))}*/}
+          {/*  onSelectionChange={onLocaleChange}*/}
+          {/*/>*/}
         </MuiToolbar>
       </Grid>
     </Grid>
   )
 }
 
-Toolbar.propTypes = {
-}
+Toolbar.propTypes = {}

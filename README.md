@@ -2,8 +2,9 @@
 
 ![nabiclient](./logo.png)
 
+NATS 客戶端
+
 特色：
 
 * 漂亮的介面
-* 支援 NATS 
-* 支援英文、繁中和簡中
+* 跨 Windows、 Mac 平台
