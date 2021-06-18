@@ -109,12 +109,12 @@ export default function DefaultLayout({
               </ListItem>
             </List>
             <Divider/>
-            <List>
-              <ListItem button>
-                <ListItemIcon><SettingsIcon/></ListItemIcon>
-                <ListItemText primary={'設定'}/>
-              </ListItem>
-            </List>
+            {/*<List>*/}
+            {/*  <ListItem button>*/}
+            {/*    <ListItemIcon><SettingsIcon/></ListItemIcon>*/}
+            {/*    <ListItemText primary={'設定'}/>*/}
+            {/*  </ListItem>*/}
+            {/*</List>*/}
           </div>
         </Drawer>
         <main className={classes.main}>
