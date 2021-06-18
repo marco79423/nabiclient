@@ -8,3 +8,4 @@ NATS 客戶端
 
 * 漂亮的介面
 * 跨 Windows、 Mac 平台
+* 支援 NATS 和 NATS Streaming
