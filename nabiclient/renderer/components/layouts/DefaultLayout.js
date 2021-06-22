@@ -12,7 +12,6 @@ import {
   ListItemIcon,
   ListItemText
 } from '@material-ui/core'
-import SettingsIcon from '@material-ui/icons/Settings'
 import StarIcon from '@material-ui/icons/Star'
 
 import Logo from '../modules/common/AppBar/Logo'
@@ -42,36 +41,9 @@ const useStyles = makeStyles((theme) => ({
   drawerContainer: {
     overflow: 'auto',
   },
-  copyright: {
-    margin: '16px auto 0',
-  },
-  main: {
-    flexGrow: 1,
-    display: 'flex',
-    background: theme.project.page.main.background,
-    height: 'calc(100vh - 64px)'
-  },
-  controlPanel: {
-    zIndex: 1,
-    width: 500,
-  },
-  listPanel: {
-    flex: 1,
-  },
-  detailPanel: {
-    flex: 1,
-  },
 }))
 
-export default function DefaultLayout({
-                                        appMode,
-                                        changeAppMode,
-                                        loading,
-                                        toolbar,
-                                        controlPanel,
-                                        listPanel,
-                                        detailPanel,
-                                      }) {
+export default function DefaultLayout({appMode, changeAppMode, loading, children}) {
   const classes = useStyles()
   return (
     <>
@@ -85,7 +57,7 @@ export default function DefaultLayout({
             <Logo/>
           </Grid>
           <Grid item>
-            {toolbar}
+
           </Grid>
         </Grid>
       </MuiAppBar>
@@ -117,17 +89,7 @@ export default function DefaultLayout({
             {/*</List>*/}
           </div>
         </Drawer>
-        <main className={classes.main}>
-          <div className={classes.controlPanel}>
-            {controlPanel}
-          </div>
-          <div className={classes.listPanel}>
-            {listPanel}
-          </div>
-          <div className={classes.detailPanel}>
-            {detailPanel}
-          </div>
-        </main>
+        {children}
       </div>
     </>
   )
