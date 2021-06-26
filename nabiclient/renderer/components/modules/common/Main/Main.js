@@ -10,7 +10,9 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     display: 'flex',
     background: theme.project.page.main.background,
-    height: 'calc(100vh - 64px)'
+    height: 'calc(100vh - 64px)',
+    position: 'relative',
+    overflowY: 'hidden',
   },
   controlPanel: {
     zIndex: 1,
@@ -18,9 +20,11 @@ const useStyles = makeStyles((theme) => ({
   },
   listPanel: {
     flex: 1,
+    overflow: 'hidden',
   },
   detailPanel: {
     flex: 1,
+    overflow: 'hidden',
   },
 }))
 

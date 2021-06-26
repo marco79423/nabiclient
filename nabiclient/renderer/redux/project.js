@@ -20,8 +20,6 @@ export const changePublishMessageBody = createAction('project/publish/changePubl
 
 export const appendMessage = createAction('project/message/appendMessage')
 
-export const removeFirstMessage = createAction('project/message/removeFirstMessage')
-
 export const clearMessages = createAction('project/message/clearMessages')
 
 // Slice

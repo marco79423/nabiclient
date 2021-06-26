@@ -30,7 +30,6 @@ export const getPublishChannel = state => state.project.publish.channel
 export const getPublishMessageBody = state => state.project.publish.messageBody
 
 const messageSelectors = messageAdapter.getSelectors(state => state.project.message)
-export const getMessageCount = state => messageSelectors.selectTotal(state)
 export const getMessages = state => messageSelectors.selectAll(state)
 export const getMessage = createDraftSafeSelector(
   [

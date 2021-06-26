@@ -1,8 +1,7 @@
 import React, {memo} from 'react'
-import {useTranslation} from 'next-i18next'
+import PropTypes from 'prop-types'
 import {makeStyles} from '@material-ui/core/styles'
 import ListItem from '../../../elements/ListItem'
-import PropTypes from 'prop-types'
 
 const useStyles = makeStyles((theme) => ({
   messageSubject: {
@@ -14,6 +13,8 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '0.8rem',
   },
   messageContent: {
+    width: '100%',
+    height: 40,
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     color: theme.project.page.main.listPanel.message.server.textColor,
@@ -21,7 +22,6 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export function Message({message, selectedMessageID, onSelectedMessageChange}) {
-  const {t} = useTranslation()
   const classes = useStyles()
   const selected = message.id === selectedMessageID
 

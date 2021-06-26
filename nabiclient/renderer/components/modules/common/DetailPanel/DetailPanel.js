@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react'
-import {useTranslation} from 'next-i18next'
 import {makeStyles} from '@material-ui/core/styles'
-import {InputBase, Paper, Tab, Toolbar} from '@material-ui/core'
+import {Paper, Tab, Toolbar} from '@material-ui/core'
 import {TabContext, TabList, TabPanel} from '@material-ui/lab'
-// import ReactJson from 'react-json-view'
 
+import PlainView from './PlainView'
+import JSONView from './JSONView'
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -37,7 +37,6 @@ const PanelTab = Object.freeze({
 
 export default function DetailPanel({message}) {
   const classes = useStyles()
-  const {t} = useTranslation()
   const [tabValue, setTabValue] = useState(PanelTab.PlainText)
 
   const [messageJsonData, setMessageJsonData] = useState(null)
@@ -68,22 +67,16 @@ export default function DetailPanel({message}) {
       <TabContext value={tabValue}>
         <Paper className={classes.dataSection} square>
           <TabPanel value={PanelTab.PlainText}>
-            <InputBase
-              autoFocus
-              readOnly
-              fullWidth
-              multiline
-              value={messageText}
-            />
+            <PlainView data={messageText}/>
           </TabPanel>
           <TabPanel value={PanelTab.JSON}>
-            {/*<ReactJson src={messageJsonData} indentWidth={2}/>*/}
+            <JSONView data={messageJsonData}/>
           </TabPanel>
         </Paper>
         <Toolbar className={classes.controlBar}>
           <TabList value={tabValue} onChange={handleTabChange}>
-            <Tab className={classes.tab} label={t('純文字')} value={PanelTab.PlainText}/>
-            <Tab className={classes.tab} label={t('JSON')} value={PanelTab.JSON} disabled={messageJsonData === null}/>
+            <Tab className={classes.tab} label={'純文字'} value={PanelTab.PlainText}/>
+            <Tab className={classes.tab} label={'JSON'} value={PanelTab.JSON} disabled={messageJsonData === null}/>
           </TabList>
         </Toolbar>
       </TabContext>
