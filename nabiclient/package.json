@@ -2,7 +2,7 @@
   "private": true,
   "name": "nabiclient",
   "description": "NATS Client",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "author": "兩大類 <marco79423@gmail.com>",
   "main": "app/background.js",
   "scripts": {
