@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
     maxHeight: 400,
   },
   bottomActions: {
-    marginTop: theme.spacing(4),
+    marginTop: theme.spacing(2),
   }
 }))
 

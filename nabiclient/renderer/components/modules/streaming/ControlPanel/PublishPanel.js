@@ -19,12 +19,11 @@ const useStyles = makeStyles((theme) => ({
     borderTopLeftRadius: 0,
   },
   controlBar: {
-    height: 60,
+
   },
   requestBody: {
     flex: 1,
-    marginTop: theme.spacing(1),
-    maxHeight: 400,
+    marginTop: theme.spacing(2),
   },
   bottomActions: {
     marginTop: theme.spacing(4),
