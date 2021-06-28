@@ -21,6 +21,8 @@ if (isProd) {
     height: 900,
   })
 
+  mainWindow.setMenu(null)
+
   if (isProd) {
     await mainWindow.loadURL('app://./index.html')
   } else {
