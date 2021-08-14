@@ -2,8 +2,8 @@ import {app, ipcMain} from 'electron'
 import serve from 'electron-serve'
 
 import {createWindow} from './helpers'
-import {connectNATS} from './utils/NATSClient'
-import {connectNATSStreaming} from './utils/NATSStreamingClient'
+import NATSClient from './utils/NATSClient'
+import NATSStreamingClient from './utils/NATSStreamingClient'
 
 const isProd = process.env.NODE_ENV === 'production'
 
@@ -45,10 +45,10 @@ app.on('window-all-closed', () => {
 
 // NATS
 
-let natsClient
+let natsClient = new NATSClient()
 
 ipcMain.on('nats.connect', async (event, connectInfo) => {
-  natsClient = await connectNATS(connectInfo)
+  await natsClient.connect(connectInfo)
 })
 
 ipcMain.on('nats.disconnect', async (event) => {
@@ -71,10 +71,15 @@ ipcMain.on('nats.unsubscribe', async (event, channel) => {
 
 // NATS Streaming
 
-let natsStreamingClient
+let natsStreamingClient = new NATSStreamingClient()
 
 ipcMain.on('nats-streaming.connect', async (event, connectInfo) => {
-  natsStreamingClient = await connectNATSStreaming(connectInfo)
+  if (!connectInfo.url.startsWith('nats://')) {
+    connectInfo.url = 'nats://' + connectInfo.url
+  }
+  console.log(connectInfo)
+
+  await natsStreamingClient.connect(connectInfo)
 })
 
 ipcMain.on('nats-streaming.disconnect', async (event) => {

@@ -1,39 +1,55 @@
 import {createDraftSafeSelector} from '@reduxjs/toolkit'
-import {messageAdapter} from '../project'
+import {entityAdapter} from '../project'
 
+export const selectAppMode = state => state.current.appMode
 
-export const getProjectState = state => state.current.projectState
-export const getConnectionState = state => state.current.connectionState
-export const getSelectedMessageID = state => state.current.selectedMessageID
-export const getIsSubscribed = state => state.current.isSubscribed
+export const selectProjectState = state => state.current.projectState
+export const selectSelectedMessageID = state => state.current.selectedMessageID
+export const selectMessagePanelOn = state => state.current.messagePanelOn
 
-export const getProjectData = state => state.project
-export const getProjectDataWithoutMessages = createDraftSafeSelector(
-  getProjectData,
+const searchQuerySelectors = entityAdapter.getSelectors(state => state.current.searchQuery)
+export const selectSearchQueryIDs = state => searchQuerySelectors.selectIds(state)
+export const selectSearchQueries = state => searchQuerySelectors.selectAll(state)
+export const selectSearchQuery = id => state => searchQuerySelectors.selectById(state, id)
+
+export const selectProjectData = state => state.project
+export const selectProjectDataWithoutMessages = createDraftSafeSelector(
+  selectProjectData,
   projectData => ({
     ...projectData,
-    message: messageAdapter.getInitialState(),
+    message: entityAdapter.getInitialState(),
   })
 )
-export const getSettingMaxMessageCount = state => state.project.setting.maxMessageCount
+export const selectSettingMaxMessageCount = state => state.project.setting.maxMessageCount
 
-export const getConnectionUrl = state => state.project.connection.url
+export const selectConnectionUrl = state => state.project.connection.url
 
-export const getClusterID = state => state.project.connection.clusterID
+export const selectClusterID = state => state.project.connection.clusterID
 
-export const getClientID = state => state.project.connection.clientID
+export const selectClientID = state => state.project.connection.clientID
 
-export const getSubscribeChannel = state => state.project.subscribe.channel
+export const selectSubscribeChannel = state => state.project.subscribe.channel
 
-export const getPublishChannel = state => state.project.publish.channel
+export const selectPublishChannel = state => state.project.publish.channel
 
-export const getPublishMessageBody = state => state.project.publish.messageBody
+export const selectPublishMessageBody = state => state.project.publish.messageBody
 
-const messageSelectors = messageAdapter.getSelectors(state => state.project.message)
-export const getMessages = state => messageSelectors.selectAll(state)
-export const getMessage = createDraftSafeSelector(
+const messageSelectors = entityAdapter.getSelectors(state => state.project.message)
+export const selectAllMessages = state => messageSelectors.selectAll(state)
+export const selectFilterMessageIDs = createDraftSafeSelector(
   [
-    getSelectedMessageID,
+    selectAllMessages,
+    selectSearchQueries,
+  ],
+  (messages, searchQueries) => messages
+    .filter(message => searchQueries.map(searchQuery => message.body.includes(searchQuery.value)).reduce((a, b) => a && b, true))
+    .map(message => message.id)
+)
+
+export const selectMessage = id => state => messageSelectors.selectById(state, id)
+export const selectSelectedMessage = createDraftSafeSelector(
+  [
+    selectSelectedMessageID,
     state => id => messageSelectors.selectById(state, id),
   ],
   (selectedID, messageFunc) => messageFunc(selectedID),

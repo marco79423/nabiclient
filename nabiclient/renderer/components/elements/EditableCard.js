@@ -25,7 +25,7 @@ export default function EditableCard({title, setTitle, content, setContent, save
   const classes = useStyles()
 
   return (
-    <Grid className={classes.root} container component={Paper} direction="column" justify="space-between">
+    <Grid className={classes.root} container component={Paper} direction="column" justifyContent="space-between">
       <Grid item>
         <EditableText
           className={classes.title}

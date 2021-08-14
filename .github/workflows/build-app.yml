@@ -21,6 +21,9 @@ jobs:
         with:
           node-version: 14.x
 
+      - name: 更新 npm
+        run: npm install -g npm@latest
+
       - name: 安裝套件
         working-directory: ./nabiclient
         run: npm install

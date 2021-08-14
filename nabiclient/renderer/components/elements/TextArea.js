@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import lodash from 'lodash'
 import {FormControl, InputLabel, OutlinedInput} from '@material-ui/core'
 import {makeStyles} from '@material-ui/core/styles'
 
@@ -23,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
   },
 
   internalInput: {
-    height: '85%',     // 不要佔滿全部的輸入空間
+    height: 'calc(100% - 48px)',     // 不要佔滿全部的輸入空間
     overflow: 'auto',  // 自動產生 scrollbar
 
     resize: 'none',  // 不需要自動調整大小的 grabber
@@ -34,12 +35,15 @@ const useStyles = makeStyles((theme) => ({
 
 
 function Input(props) {
+  // 消除警告，因為 textarea 不支援 inputRef
+  props  = lodash.omit(props, ['inputRef'])
+
   return (
     <textarea {...props} />
   )
 }
 
-export default function TextArea({label, value, onChange}) {
+export default function TextArea({className, label, value, onChange}) {
   const classes = useStyles()
 
   const onValueChange = (e) => {
@@ -47,7 +51,7 @@ export default function TextArea({label, value, onChange}) {
   }
 
   return (
-    <FormControl className={classes.control} variant="outlined" margin="normal" fullWidth>
+    <FormControl className={`${classes.control} ${className}`} variant="outlined" margin="normal" fullWidth>
       <InputLabel shrink={!!value} htmlFor="component-outlined">{label}</InputLabel>
       <OutlinedInput
         className={classes.input}
